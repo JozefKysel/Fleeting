@@ -1,8 +1,7 @@
 import React, { useRef, useState } from 'react';
 import Countdown from './Countdown';
-import { makeOutGoing } from '../services/WebSocketService'
 import { Button } from 'antd';
-import { start, setSrcObjectRemote } from '../services/CallService'
+import { start, setSrcObjectRemote, makeOutGoing } from '../services/CallService'
 import './CallPaneCaller.less'
 
 function CallPaneCaller(props) {
@@ -15,7 +14,7 @@ function CallPaneCaller(props) {
 
   const handleOnClick = () => {
     start(true, () => setSrcObjectRemote(remoteVideo.current))
-    makeOutGoing(props)
+    makeOutGoing(props);
     setView(true)
   }
 
@@ -50,4 +49,3 @@ function CallPaneCaller(props) {
 
 
 export default CallPaneCaller;
-

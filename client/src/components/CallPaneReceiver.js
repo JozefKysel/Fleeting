@@ -22,7 +22,8 @@ function CallPaneReceiver(props) {
         <video autoPlay style={{ width: '100%' }} ref={remoteVideo} />
         {/* REMOTE VIDEO */}
         <div className="countdown">
-        <CountdownReceiver timeData={{ callLength: props.value.incomingTimeData.callLength }} callExpired={props.value.callHasExpired} />
+        <CountdownReceiver timeData={{ callLength: props.value.incomingTimeData.callLength }}
+        callExpired={props.value.callHasExpired} />
         </div>
         </div>
       </>

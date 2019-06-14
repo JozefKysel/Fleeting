@@ -5,7 +5,7 @@ import CreateContact from '../components/CreateContact';
 import DB from '../services/dbService';
 import InputTime from '../components/InputTime';
 import CallPaneReceiver from '../components/CallPaneReceiver';
-import { listenForIncomingCall } from '../services/WebSocketService'
+import { listenForIncomingCall } from '../services/CallService'
 import CallExpired from '../components/CallExpired'
 import AddToContacts from '../components/AddToContacts'
 

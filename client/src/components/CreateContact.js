@@ -24,17 +24,17 @@ function CreateContact() {
     if (!goBack) {
       return (
         <div className="CreateContact">
-  
+
           Create Contact Component
-    
+
         <form onSubmit={handleOnSubmitContact}>
             <p>Contact</p>
             <input type="text" onChange={handleOnChangeContact} value={formInput}></input>
             <input type="submit" value="Add"></input>
           </form>
-  
+
           <button onClick={handleOnSubmitGoBack}>Done</button>
-  
+
         </div>
       );
     } else {

@@ -16,12 +16,20 @@ var peerConnectionConfig = {
 
 uuid = createUUID();
 
-serverConnection = new WebSocket(CALL_SERVER_BASE_URL);
-serverConnection.onmessage = gotMessageFromServer;
+// serverConnection = new WebSocket(CALL_SERVER_BASE_URL);
+// serverConnection.onmessage = gotMessageFromServer;
 
-serverConnection.onerror = function(event) {
-  console.error("WebSocket error observed:", event);
-};
+console.log('lol')
+const io = require('socket.io-client')
+const socket = io('https://localhost:4001');
+console.log('socket', socket);
+socket.on('message', data => {
+  console.log('this is data----______-----_______--->', data);
+  gotMessageFromServer(data);
+});
+
+socket.on('error', (error) => console.log('error observed', error));
+
 
 var constraints = {
   video: true,
@@ -48,8 +56,10 @@ export function setSrcObject(localVideo) {
 export function start(isCaller, cb) {
   console.log('start');
     peerConnection = new RTCPeerConnection(peerConnectionConfig);
+    console.log(peerConnection);
     peerConnection.onicecandidate = gotIceCandidate;
     peerConnection.ontrack = (event) => {
+      console.log(event);
       gotRemoteStream(event);
       if(typeof cb === 'function') cb();
     }
@@ -61,10 +71,11 @@ export function start(isCaller, cb) {
 
 // ===================================================================
 
-function gotMessageFromServer(message) {
+function gotMessageFromServer(data) {
+  console.log('got message', data);
   if (!peerConnection) start(false);
 
-  var signal = JSON.parse(message.data);
+  var signal = JSON.parse(data);
 
   // Ignore messages from ourself
   if (signal.uuid === uuid) return;
@@ -83,15 +94,14 @@ function gotMessageFromServer(message) {
 
 function gotIceCandidate(event) {
   if (event.candidate != null) {
-    console.log('sending')
-    serverConnection.send(JSON.stringify({ 'ice': event.candidate, 'uuid': uuid }));
+    socket.emit('message', JSON.stringify({ 'ice': event.candidate, 'uuid': uuid }));
   }
 }
 
 function createdDescription(description) {
   console.log('got description');
   peerConnection.setLocalDescription(description).then(function () {
-    serverConnection.send(JSON.stringify({ 'sdp': peerConnection.localDescription, 'uuid': uuid }));
+    socket.emit('message', JSON.stringify({ 'sdp': peerConnection.localDescription, 'uuid': uuid }));
   }).catch(errorHandler);
 }
 
@@ -100,7 +110,6 @@ function gotRemoteStream(event) {
   console.log('got remote stream');
   remoteStream = event.streams[0];
 }
-console.log(remoteStream)
 
 export function setSrcObjectRemote(remoteVideo) {
   console.log('set src object')
@@ -117,4 +126,15 @@ function createUUID() {
   }
 
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
+
+export const listenForIncomingCall = (toggleFlag) => {
+  socket.on("incoming call", data => {
+    window.confirm(`Tom is calling you, do you want to answer?`)
+    toggleFlag(data)
+  })
+}
+
+export const makeOutGoing = (data, message) => {
+  socket.emit('outgoing call', data);
 }
