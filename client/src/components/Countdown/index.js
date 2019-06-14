@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState, useContext } from 'react';
-import { CallerContext } from '../containers/Home';
+import { CallerContext } from '../../containers/Home';
 import './Countdown.less'
 
 function Countdown(props) {

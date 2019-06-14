@@ -1,13 +1,9 @@
 import React from 'react';
 import './Home.less';
 import { useState } from 'react';
-import CreateContact from '../components/CreateContact';
+import { CreateContact, InputTime, CallPaneReceiver, CallExpired, AddToContacts } from '../components';
 import DB from '../services/dbService';
-import InputTime from '../components/InputTime';
-import CallPaneReceiver from '../components/CallPaneReceiver';
 import { listenForIncomingCall } from '../services/CallService'
-import CallExpired from '../components/CallExpired'
-import AddToContacts from '../components/AddToContacts'
 
 export const RenderContext = React.createContext(null);
 export const CallerContext = React.createContext(null);

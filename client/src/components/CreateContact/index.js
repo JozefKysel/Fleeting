@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import App from '../containers/App';
+import App from '../../containers/App';
 import './CreateContact.less'
 
 function CreateContact() {

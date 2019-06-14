@@ -1,8 +1,7 @@
 import React from 'react';
 import './App.less';
 import Home from './Home'
-import NavBar from '../components/NavBar'
-import Footer from '../components/Footer';
+import { NavBar, Footer } from '../components';
 
 function App() {
   return (

@@ -1,15 +1,12 @@
 import React, { useRef, useState } from 'react';
-import Countdown from './Countdown';
+import { Countdown } from '..';
 import { Button } from 'antd';
-import { start, setSrcObjectRemote, makeOutGoing } from '../services/CallService'
+import { start, setSrcObjectRemote, makeOutGoing } from '../../services/CallService'
 import './CallPaneCaller.less'
 
 function CallPaneCaller(props) {
 
   const [view, setView] = useState(false);
-
-  console.log("SENDER")
-
   const remoteVideo = useRef(null);
 
   const handleOnClick = () => {
