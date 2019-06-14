@@ -1,13 +1,11 @@
-import {
-  CALL_SERVER_BASE_URL
-} from '../config';
+import { SERVER_BASE_URL } from '../config';
 
-var localStream;
-var remoteStream;
-var peerConnection;
-var uuid;
-var serverConnection;
-var peerConnectionConfig = {
+let localStream;
+let remoteStream;
+let peerConnection;
+let uuid;
+
+const peerConnectionConfig = {
   'iceServers': [
     { 'urls': 'stun:stun.stunprotocol.org:3478' },
     { 'urls': 'stun:stun.l.google.com:19302' },
@@ -16,22 +14,13 @@ var peerConnectionConfig = {
 
 uuid = createUUID();
 
-// serverConnection = new WebSocket(CALL_SERVER_BASE_URL);
-// serverConnection.onmessage = gotMessageFromServer;
-
-console.log('lol')
 const io = require('socket.io-client')
-const socket = io('https://localhost:4001');
-console.log('socket', socket);
-socket.on('message', data => {
-  console.log('this is data----______-----_______--->', data);
-  gotMessageFromServer(data);
-});
+const socket = io(SERVER_BASE_URL);
 
-socket.on('error', (error) => console.log('error observed', error));
+socket.on('message', data => gotMessageFromServer(data));
+socket.on('error', error => console.log('error observed', error));
 
-
-var constraints = {
+const constraints = {
   video: true,
   audio: true,
 };
