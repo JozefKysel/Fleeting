@@ -4,7 +4,7 @@ const db = {};
 const dbUrl = 'mongodb://localhost:27017';
 const dbName = 'fleeting';
 
-db.MongoClient = new MongoClient(dbUrl);
+db.MongoClient = new MongoClient(dbUrl, { useNewUrlParser: true });
 
 db.MongoClient.connect(error => {
   if (error) throw new Error(error);

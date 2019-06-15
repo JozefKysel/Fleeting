@@ -9,8 +9,8 @@ const fs = require('fs');
 const cors = require('cors');
 
 const serverConfig = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem'),
+  key: fs.readFileSync('./cert/key.pem'),
+  cert: fs.readFileSync('./cert/cert.pem'),
 };
 const port = 4001;
 const app = express();
