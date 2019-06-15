@@ -2,21 +2,21 @@
 /* eslint-disable no-console */
 
 const express = require("express");
-const bodyParser = require('body-parser');
 const router = require('./router');
 const https = require('https');
 const socketIo = require("socket.io");
 const fs = require('fs');
+const cors = require('cors');
 
 const serverConfig = {
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('cert.pem'),
 };
-
 const port = 4001;
 const app = express();
-// app.use(bodyParser);
-// app.use(router.routes());
+app.use(cors());
+app.use(express.json());
+app.use(router);
 
 
 const server = https.createServer(serverConfig, app);

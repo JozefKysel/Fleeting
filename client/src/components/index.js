@@ -8,5 +8,6 @@ import CreateContact from './CreateContact';
 import Footer from './Footer';
 import InputTime from './InputTime';
 import NavBar from './NavBar';
+import Signup from './SignUp';
 
-export { AddToContacts, CallExpired, CallPaneCaller, CallPaneReceiver, Countdown, CountdownReceiver, CreateContact, Footer, InputTime, NavBar };
+export { AddToContacts, CallExpired, CallPaneCaller, CallPaneReceiver, Countdown, CountdownReceiver, CreateContact, Footer, InputTime, NavBar, Signup };

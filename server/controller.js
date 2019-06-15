@@ -8,8 +8,8 @@ exports.postNewUser = async (req, res) => {
     let [ username, password ] = decoded.split(':');
     password = await bcrypt.hash(password, 10);
     await users.set(req.body.email, username, password, req.body.gender);
-    res.status = 200;
+    res.status(200);
   } catch (error) {
-    res.status = 500;
+    res.status(500);
   }
 };
