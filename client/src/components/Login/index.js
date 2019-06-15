@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Signup } from '..';
-import { Router, Link } from '@reach/router';
+import { Signup, PrivateRoutes } from '..';
 import api from '../../api-client';
+import { Redirect, Link } from 'react-router-dom';
 
 function Login() {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [access_token, setToken] = useState('');
 
   const onUsername = (e) => setUsername(e.target.value);
   const onPassword = (e) => setPassword(e.target.value);
@@ -14,13 +15,18 @@ function Login() {
     e.preventDefault();
     if (username && password) {
       api.logUserIn(username, password)
-        .then(res => console.log(res));
+        .then(res => res.json())
+        .then(res => {
+          window.localStorage.setItem('access_token', res.token);
+          setToken(res.token);
+        })
+        .catch(e => console.log(e));
       setUsername('');
       setPassword('');
     }
   }
 
-  return (
+  return access_token ? <Redirect to="/"/> : (
     <div>
       <form onSubmit={handleSubmit}>
         <input type="text" value={username} onChange={onUsername}></input>

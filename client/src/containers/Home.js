@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { CreateContact, InputTime, CallPaneReceiver, CallExpired, AddToContacts } from '../components';
 import DB from '../services/dbService';
 import { listenForIncomingCall } from '../services/CallService';
-import { Router, Link, Redirect } from "@reach/router"
+import { Router, Link, navigate } from "@reach/router"
 
 export const RenderContext = React.createContext(null);
 export const CallerContext = React.createContext(null);
@@ -38,8 +38,8 @@ function Home() {
     setCallExpired(flag)
   }
 
-  if (window.localStorage.getItem('access_token')) {
-    return <Redirect to="login"/>
+  if (!window.localStorage.getItem('access_token')) {
+    return (<div>dog</div>)
   } else {
     if (callExpired) {
       console.log('yo')

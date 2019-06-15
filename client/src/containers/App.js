@@ -2,7 +2,8 @@ import React from 'react';
 import './App.less';
 import Home from './Home'
 import { NavBar, Footer, Signup, Login } from '../components';
-import { Router, Link } from '@reach/router';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { PrivateRoutes } from '../components';
 
 //
 // <div className="NavBar">
@@ -16,15 +17,17 @@ import { Router, Link } from '@reach/router';
 // </div>
 function App() {
   return (
-    <div className="App">
-      <div className="container">
-      <Router>
-        <Home path="/"/>
-        <Login path="login"/>
-        <Signup path="signup"/>
-      </Router>
+    <BrowserRouter>
+      <div className="App">
+        <div className="container">
+          <Switch>
+            <PrivateRoutes component={Home} exact path="/"/>
+            <Route exact path="/login" component={Login}/>
+            <Route exact path="/signup" component={Signup}/>
+          </Switch>
+        </div>
       </div>
-    </div>
+    </BrowserRouter>
   );
 }
 

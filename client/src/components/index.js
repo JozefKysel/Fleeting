@@ -10,5 +10,6 @@ import InputTime from './InputTime';
 import NavBar from './NavBar';
 import Signup from './SignUp';
 import Login from './Login';
+import PrivateRoutes from './PrivateRoutes';
 
-export { Login, AddToContacts, CallExpired, CallPaneCaller, CallPaneReceiver, Countdown, CountdownReceiver, CreateContact, Footer, InputTime, NavBar, Signup };
+export { PrivateRoutes, Login, AddToContacts, CallExpired, CallPaneCaller, CallPaneReceiver, Countdown, CountdownReceiver, CreateContact, Footer, InputTime, NavBar, Signup };

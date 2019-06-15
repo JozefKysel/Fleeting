@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import api from '../../api-client';
 import './SignUp.less';
 
-function Signup() {
+function Signup(props) {
 
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
@@ -18,9 +18,10 @@ function Signup() {
     e.preventDefault();
     if (user && password && email && gender) {
       api.saveUser(user, password, email, gender);
-      setUser('');
       setPassword('');
       setEmail('');
+      setUser('');
+      props.history.push('/login');
     }
   }
 
