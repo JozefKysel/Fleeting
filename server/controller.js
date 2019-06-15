@@ -24,7 +24,7 @@ exports.postLoginUser = async (req, res) => {
     user
       ? bcrypt.compare(password, user.password, (_, same) => {
           same === true
-            ? jwt.sign({user}, 'secretkey', (_, token) => res.json({ token }))
+            ? jwt.sign({user}, 'secretkey', (_, token) => res.json({ token, user }))
             : res.status(403).end();
         })
       : res.status(403).end();

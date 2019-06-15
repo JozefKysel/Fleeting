@@ -1,54 +1,42 @@
-const express = require("express");
-const https = require('https');
-const socketIo = require("socket.io");
-const client = require('socket.io-client');
-const fs = require('fs');
+const server = require('./index');
+const PORT = 4001;
+const { createClient } = require('./utils');
 
-const serverConfig = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem'),
-};
+beforeAll(async done => await server.listen(PORT, done));
+afterAll(async done => await server.close(done));
 
-const port = 4001;
-let app;
-let server;
-let io;
 
-beforeAll(done => {
-  // app = express();
-  // server = https.createServer(serverConfig, app).listen();
-  server = https.createServer().listen();
-  io = socketIo(server);
-  done();
-});
+describe('Socket.io', () => {
 
-afterAll(done => {
-  io.close();
-  server.close();
-  done();
-});
-
-beforeEach(done => {
-  socket = client.connect(`https://localhost:${port}`, {
-    'reconnection delay': 0,
-    'reopen delay': 0,
-    'force new connection': true,
-    transports: ['websocket']
+  test('server should be able to broadcast a message received from a client to other clients', async done => {
+    const client1 = await createClient(PORT);
+    const client2 = await createClient(PORT);
+    const message = 'hello world';
+    
+    client1.emit('message', message);
+    client2.on('message', data => {
+      expect(data).toBe(message);
+      client1.disconnect();
+      client2.disconnect();
+      done();
+    });
   });
-  socket.on('connect', () => done());
-});
 
-afterEach(done => {
-  if (socket.connected) socket.disconnect();
-  done();
-});
-
-const add = (a, b) => a + b;
-
-describe('First', () => {
-  test('1 plus 1 equals 2', () => {
-    expect(add(1, 1)).toBe(2)
+  test('server should be able to direct a call from one client to the other', async done => {
+    const client1 = await createClient(PORT);
+    const client2 = await createClient(PORT);
+    
+    client1.emit('outgoing call', 'Client1 is calling you');
+    client2.on('incoming call', data => {
+      expect(data).toBe('Client1 is calling you');
+      client1.disconnect();
+      client2.disconnect();
+      done();
+    });
   });
-  
+
+  test('server should be able to log an error if one occurs', () => {
+    // don't know how to test this
+  });
 
 });
