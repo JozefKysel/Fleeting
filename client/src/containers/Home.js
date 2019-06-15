@@ -15,6 +15,7 @@ export const CallerContext = React.createContext(null);
 
 function Home(props) {
   const [createContact, setCreateContact] = useState(false)
+  const [selectContact, setSelectContact] = useState('')
   const [goToTimeInput, setGoToTimeInput] = useState(false)
   const [incomingCall, setIncomingCall] = useState(false)
   const [callExpired, setCallExpired] = useState(false)
@@ -32,6 +33,7 @@ function Home(props) {
   }
 
   const selectContactToCall = (contact) => {
+    setSelectContact(contact)
     setGoToTimeInput(true)
   }
 
@@ -53,7 +55,7 @@ function Home(props) {
         </CallerContext.Provider>
       </div>
     )
-  } else if (goToTimeInput) {
+  } else if (goToTimeInput && selectContact) {
     return (
       <div>
         <CallerContext.Provider value={{ callHasExpired }}>
@@ -61,26 +63,22 @@ function Home(props) {
         </CallerContext.Provider>
       </div>
     )
-  } if (!createContact) {
+  } else {
     return (
-      <div>
-        <RenderContext.Provider value={{ selectContactToCall, addAContact }}>
-          <div className="addContactButton">
-          <div className="contacts">
-            Contacts
-          </div>
-          </div>
-            <User userData={props.location.state.userData}/>
-          <div className="contactsButton">
-            <FadeIn>
-            <Button size="large"> Add To Contacts</Button>
-            </FadeIn>
-          </div>
-        </RenderContext.Provider>
-      </div>
+      <RenderContext.Provider value={{ selectContactToCall, addAContact }}>
+        <div className="NavBar">
+          <NavBar userData={props.location.state.userData}/>
+          <User className="user-profile" userData={props.location.state.userData}/>
+        </div>
+      </RenderContext.Provider>
     );
   }
-
 }
 
 export default Home;
+
+// <div className="contactsButton">
+//   <FadeIn>
+//     <Button size="small"> Add</Button>
+//   </FadeIn>
+// </div>

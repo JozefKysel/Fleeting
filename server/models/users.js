@@ -1,5 +1,6 @@
 const db = require('./');
 
+
 exports.set = (email, username, password, gender) => {
   return db.conn.collection('users').insertOne({
     email,
@@ -11,10 +12,18 @@ exports.set = (email, username, password, gender) => {
   });
 };
 
-exports.get = username => {
-  return db.conn.collection('users').findOne({
-    username
-  });
+exports.get = async username => {
+  try {
+    const searchExpression = new RegExp(username, 'i');
+    const response = await db.conn.collection('users').findOne({
+    username: {
+      $regex: searchExpression
+    }
+    });
+    return response;
+  } catch(e) {
+    console.log(e);
+  }
 };
 
 exports.update = (username, property) => {

@@ -21,6 +21,9 @@ exports.logUserIn = (username, password) => fetch('https://localhost:4001/login'
   }
 });
 
-exports.getUserData = (userId) => {
-  console.log(userId);
-}
+exports.searchForUsers = (username) => fetch(`https://localhost:4001/search/${username}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': `Bearer ${window.localStorage.getItem('access_token')}`
+  }
+});

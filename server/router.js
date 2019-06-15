@@ -2,7 +2,7 @@ const router = require('express').Router();
 const controller = require('./controller');
 
 const verifyToken = (req, res, next) => {
-  const bearerHeader = req.headers.authorization;
+  const bearerHeader = req.headers['authorization'];
   if (typeof bearerHeader !== 'undefined') {
     const bearer = bearerHeader.split(' ');
     const bearerToken = bearer[1];
@@ -13,6 +13,7 @@ const verifyToken = (req, res, next) => {
 
 router.post('/signup', controller.postSignupUser);
 router.post('/login', controller.postLoginUser);
+router.get('/search/:username', verifyToken, controller.getAll);
 // router.get('/home', verifyToken, controller.getUserData);
 // router.put('/add', verifyToken, controller.putNewContact);
 // router.put('/call-done', verifyToken, controller.putNewCallLength);

@@ -33,6 +33,15 @@ exports.postLoginUser = async (req, res) => {
   }
 };
 
+exports.getAll = async (req, res) => {
+  try {
+    jwt.verify(req.token, 'secretkey', error => error && res.status(403).end());
+    res.json(await users.get(req.params.username));
+  } catch (e) {
+    res.status(500).end();
+  }
+}
+
 // exports.getUserData = async (req, res) => {
 //   try {
 //     jwt.verify(req.token, 'secretkey', error => error && res.status(403).end());

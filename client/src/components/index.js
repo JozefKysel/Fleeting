@@ -9,6 +9,7 @@ import NavBar from './NavBar';
 import Signup from './SignUp';
 import Login from './Login';
 import PrivateRoutes from './PrivateRoutes';
-import User from './Contacts';
-
-export { User, PrivateRoutes, Login, CallExpired, CallPaneCaller, CallPaneReceiver, Countdown, CountdownReceiver, Footer, InputTime, NavBar, Signup };
+import User from './User';
+import ContactList from './ContactList';
+import Contact from './Contact';
+export { ContactList, Contact, User, PrivateRoutes, Login, CallExpired, CallPaneCaller, CallPaneReceiver, Countdown, CountdownReceiver, Footer, InputTime, NavBar, Signup };
