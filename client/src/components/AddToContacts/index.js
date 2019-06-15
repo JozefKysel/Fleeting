@@ -1,6 +1,6 @@
 import React from 'react';
 import { useContext } from 'react'
-import { RenderContext } from '../containers/Home';
+import { RenderContext } from '../../containers/Home';
 import { Button } from 'antd';
 import 'antd/lib/button/style';
 import FadeIn from 'react-fade-in';

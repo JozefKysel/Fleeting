@@ -3,7 +3,7 @@ import './InputTime.less';
 import { TimePicker } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
-import CallPaneCaller from '../components/CallPaneCaller';
+import { CallPaneCaller } from '..';
 import 'antd/dist/antd.css';
 import FadeIn from 'react-fade-in';
 import { Button } from 'antd';

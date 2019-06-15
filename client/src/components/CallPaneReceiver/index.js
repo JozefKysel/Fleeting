@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect, useRef } from 'react';
-import CountdownReceiver from './CountdownReceiver';
-import { start, setSrcObjectRemote } from '../services/CallService'
+import { CountdownReceiver } from '..';
+import { start, setSrcObjectRemote } from '../../services/CallService'
 import './CallPaneReceiver.less'
 
 function CallPaneReceiver(props) {

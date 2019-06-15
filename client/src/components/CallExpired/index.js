@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from 'antd';
 import { useState } from 'react';
-import Home from '../containers/Home'
-import './CallExpired.less' 
+import Home from '../../containers/Home'
+import './CallExpired.less'
 
 function CallExpired() {
 
