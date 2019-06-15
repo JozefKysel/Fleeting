@@ -9,5 +9,6 @@ import Footer from './Footer';
 import InputTime from './InputTime';
 import NavBar from './NavBar';
 import Signup from './SignUp';
+import Login from './Login';
 
-export { AddToContacts, CallExpired, CallPaneCaller, CallPaneReceiver, Countdown, CountdownReceiver, CreateContact, Footer, InputTime, NavBar, Signup };
+export { Login, AddToContacts, CallExpired, CallPaneCaller, CallPaneReceiver, Countdown, CountdownReceiver, CreateContact, Footer, InputTime, NavBar, Signup };

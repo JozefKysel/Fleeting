@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^5.2.1",
+    "@reach/router": "^1.2.1",
     "antd": "^3.19.2",
     "btoa": "^1.2.1",
     "craco-antd": "^1.11.0",

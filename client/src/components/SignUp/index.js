@@ -33,7 +33,6 @@ function Signup() {
         <option value="male">male</option>
         <option value="female">female</option>
       </select>
-      <input type="submit" value="sign up"></input>
     </form>
   );
 }

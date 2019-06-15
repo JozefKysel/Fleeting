@@ -13,3 +13,10 @@ exports.saveUser = (username, password, email, gender) => {
     })
   });
 };
+
+exports.logUserIn = (username, password) => fetch('https://localhost:4001/login', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Basic ${btoa(username + ':' + password)}`
+  }
+});
