@@ -1,8 +1,9 @@
 Backend:
 
-- Call specific user (see SimpleWebRTC, PeerJS)
-- Time synchronicity to be handled in server, not in client
-- Rewrite servers in Socket.io & Express instead of WebSockets & bare Node
+- [ ] Call specific user (see SimpleWebRTC, PeerJS)
+- [ ] Time synchronicity to be handled in server, not in client
+- [x] Rewrite servers in Socket.io & Express instead of WebSockets & bare Node
+- [ ] Create user login (JWT & Redis cache) & database (MongoDB)
 
 Frontend:
 
