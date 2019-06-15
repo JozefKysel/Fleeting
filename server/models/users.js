@@ -1,7 +1,7 @@
 const db = require('./');
 
 exports.set = (email, username, password, gender) => {
-  db.conn.collection('users').insertOne({
+  return db.conn.collection('users').insertOne({
     email,
     username,
     password,
@@ -11,8 +11,8 @@ exports.set = (email, username, password, gender) => {
   });
 };
 
-exports.get = (username) => {
-  db.conn.collection('users').findOne({
+exports.get = username => {
+  return db.conn.collection('users').findOne({
     username
   });
 };

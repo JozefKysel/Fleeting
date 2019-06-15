@@ -10,9 +10,9 @@ exports.postNewUser = async (req, res) => {
     password = await bcrypt.hash(password, 10);
     const setUser = await users.set(req.body.email, username, password, req.body.gender);
     res.json(setUser);
-    res.sendStatus(200);
+    res.status(200);
   } catch (error) {
-    res.sendStatus(500);
+    res.status(500);
   }
 };
 
@@ -21,19 +21,21 @@ exports.postLoginUser = async (req, res) => {
     const decoded = atob(req.headers.authorization.split(' ')[1]);
     const [ username, password ] = decoded.split(':');
     const user = await users.get(username);
-    user && bcrypt.compare(password, user.password, (_, same) => {
-      same === true
-        ? jwt.sign({user}, 'secretkey', (_, token) => res.json({ token }))
-        : res.sendStatus(500);
-    });
+    user
+      ? bcrypt.compare(password, user.password, (_, same) => {
+          same === true
+            ? jwt.sign({user}, 'secretkey', (_, token) => res.json({ token }))
+            : res.status(403).end();
+        })
+      : res.status(403).end();
   } catch (error) {
-    res.sendStatus(500);
+    res.status(500);
   }
 };
 
 exports.postSthElse = async (req, res) => {
   jwt.verify(req.token, 'secrekey', (err, authData) => {
-    if (error) res.sendStatus(403);
+    if (error) res.status(403);
     else res.json({ message: 'post created', authData });
   });
 };
