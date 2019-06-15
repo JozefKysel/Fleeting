@@ -13,7 +13,7 @@ const verifyToken = (req, res, next) => {
 
 router.post('/signup', controller.postSignupUser);
 router.post('/login', controller.postLoginUser);
-router.get('/home', verifyToken, controller.getUserData);
+// router.get('/home', verifyToken, controller.getUserData);
 // router.put('/add', verifyToken, controller.putNewContact);
 // router.put('/call-done', verifyToken, controller.putNewCallLength);
 

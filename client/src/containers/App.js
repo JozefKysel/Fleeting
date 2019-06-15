@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.less';
 import Home from './Home'
-import { NavBar, Footer, Signup, Login } from '../components';
+import { Signup, Login } from '../components';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { PrivateRoutes } from '../components';
 

@@ -20,3 +20,7 @@ exports.logUserIn = (username, password) => fetch('https://localhost:4001/login'
     'Authorization': `Basic ${btoa(username + ':' + password)}`
   }
 });
+
+exports.getUserData = (userId) => {
+  console.log(userId);
+}

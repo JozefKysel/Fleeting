@@ -8,6 +8,7 @@ function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [access_token, setToken] = useState('');
+  const [user, setUser] = useState({});
 
   const onUsername = (e) => setUsername(e.target.value);
   const onPassword = (e) => setPassword(e.target.value);
@@ -18,6 +19,7 @@ function Login() {
         .then(res => res.json())
         .then(res => {
           window.localStorage.setItem('access_token', res.token);
+          setUser(res.user);
           setToken(res.token);
         })
         .catch(e => console.log(e));
@@ -26,7 +28,10 @@ function Login() {
     }
   }
 
-  return access_token ? <Redirect to="/"/> : (
+  return access_token ? <Redirect to={{
+    pathname: "/",
+    state: {userData: user}
+  }}/> : (
     <div>
       <form onSubmit={handleSubmit}>
         <input type="text" value={username} onChange={onUsername}></input>
