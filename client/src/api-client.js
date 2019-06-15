@@ -6,6 +6,9 @@ exports.saveUser = (username, password, email) => {
     headers: {
       'Authorization': `Basic ${btoa(username:password)}`
     },
-    body: JSON.stringify(email);
+    body: {
+      email: JSON.stringify(email),
+      gender: JSON.stringify(gender)
+    }
   });
 };

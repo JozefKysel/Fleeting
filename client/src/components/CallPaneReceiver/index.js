@@ -10,8 +10,7 @@ function CallPaneReceiver(props) {
 
   useEffect(() => {
     start(false, () => setSrcObjectRemote(remoteVideo.current))
-    console.log("RECEIVER")
-  }, [])
+  }, []);
 
   if (props.value.incomingTimeData.callLength) {
     return (

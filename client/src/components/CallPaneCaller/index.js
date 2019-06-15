@@ -22,7 +22,6 @@ function CallPaneCaller(props) {
           <div className="text">
           <div className="prompt">
             Ready?
-        {/* LOCAL VIDEO */}
             {/* <video autoPlay muted style={{ width: '40%' }} ref={localVideo => setSrcObject(localVideo)} /> */}
           </div>
           </div>
@@ -34,7 +33,6 @@ function CallPaneCaller(props) {
     return (
       <>
         <div className="video">
-          {/* REMOTE VIDEO */}
           <video autoPlay style={{ width: '100%' }} ref={remoteVideo} />
           <Countdown timeData={props} />
         </div>
