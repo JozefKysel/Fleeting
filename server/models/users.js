@@ -6,7 +6,7 @@ exports.set = (email, username, password, gender) => {
     username,
     password,
     gender,
-    callLengthLogs: [],
+    callLengths: [],
     contacts: []
   });
 };
@@ -15,4 +15,11 @@ exports.get = username => {
   return db.conn.collection('users').findOne({
     username
   });
+};
+
+exports.update = (username, property) => {
+  return db.conn.collection('users').findOneAndUpdate(
+    { username },
+    { property }
+  );
 };

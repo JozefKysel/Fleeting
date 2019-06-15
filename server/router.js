@@ -8,11 +8,13 @@ const verifyToken = (req, res, next) => {
     const bearerToken = bearer[1];
     req.token = bearerToken;
     next();
-  } else res.sendStatus(403);
+  } else res.status(403).end();
 };
 
-router.post('/signup', controller.postNewUser);
+router.post('/signup', controller.postSignupUser);
 router.post('/login', controller.postLoginUser);
-router.post('/test', verifyToken, controller.postSthElse);
+router.get('/home', verifyToken, controller.getUserData);
+// router.put('/add', verifyToken, controller.putNewContact);
+// router.put('/call-done', verifyToken, controller.putNewCallLength);
 
 module.exports = router;
