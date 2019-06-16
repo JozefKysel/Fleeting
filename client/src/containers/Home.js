@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { NavBar, Footer, InputTime, CallPaneReceiver, CallExpired} from '../components';
 import { User } from '../components';
 import { listenForIncomingCall } from '../services/CallService';
-import { Router, Link, navigate } from "@reach/router";
+import { Router, Link } from "@reach/router";
 import { Button } from 'antd';
 import FadeIn from 'react-fade-in';
 import 'antd/lib/button/style';
@@ -14,11 +14,11 @@ export const RenderContext = React.createContext(null);
 export const CallerContext = React.createContext(null);
 
 function Home(props) {
-  const [createContact, setCreateContact] = useState(false)
-  const [selectContact, setSelectContact] = useState('')
-  const [goToTimeInput, setGoToTimeInput] = useState(false)
-  const [incomingCall, setIncomingCall] = useState(false)
-  const [callExpired, setCallExpired] = useState(false)
+  const [createContact, setCreateContact] = useState(false);
+  const [selectContact, setSelectContact] = useState('');
+  const [goToTimeInput, setGoToTimeInput] = useState(false);
+  const [incomingCall, setIncomingCall] = useState(false);
+  const [callExpired, setCallExpired] = useState(false);
   const [incomingTimeData, setIncomingTimeData] = useState({});
 
   const setIncomingCallFlag = (timeData) => {

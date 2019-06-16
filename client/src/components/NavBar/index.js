@@ -20,7 +20,7 @@ function NavBar({userData}) {
   }
 
   return (
-    <div className="Nav">s
+    <div className="Nav">
       <div className="title">
       Fleeting
       </div>
