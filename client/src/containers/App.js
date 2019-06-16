@@ -16,9 +16,6 @@ function App() {
           <Route exact path="/login" component={Login}/>
           <Route exact path="/signup" component={Signup}/>
         </Switch>
-        <div className="Footer">
-          <Footer/>
-        </div>
       </div>
     </BrowserRouter>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './User.less';
 import FadeIn from 'react-fade-in';
 import api from '../../api-client';
@@ -9,7 +9,7 @@ function User({userData}) {
   return (
     <FadeIn>
       <div>
-        <div><img src={maleAvatar} style={{ width: 75, height: 75, borderRadius: 50 }}/>{userData.username}</div>
+        <div><img src={maleAvatar} style={{ width: 75, height: 75, borderRadius: 50 }} alt="avatar"/>{userData.username}</div>
         <div className="contacts">Contacts</div>
         <ContactList contacts={userData.contacts}/>
       </div>

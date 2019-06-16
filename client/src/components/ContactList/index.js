@@ -1,11 +1,11 @@
 import React from 'react';
 import { Contact } from '..';
 
-function ContactList({contacts}) {
-  console.log(contacts);
+function ContactList({add, contacts}) {
+
   return contacts.map(contact =>
     <div key={contact._id}>
-      <Contact contact={contact}/>
+      <Contact add={add} contact={contact}/>
     </div>);
 }
 

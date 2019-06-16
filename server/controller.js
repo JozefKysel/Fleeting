@@ -54,13 +54,15 @@ exports.getAll = async (req, res) => {
 // };
 
 exports.putNewContact = async (req, res) => {
+  const { username } = req.params;
+  const { newContact } = req.body;
   try {
     jwt.verify(req.token, 'secretkey', error => error && res.status(403).end());
-    if (req.body.newContact && req.headers.username) {
-      const contacts = await users.get(req.headers.username).contacts;
+    if (newContact && username) {
+      const contacts = await users.get(username).contacts;
       contacts.push(newContact);
       await users.update(username, contacts);
-      res.json({ contacts });
+      res.status(200).json({ contacts });
     } else res.status(500).end();
   } catch (error) {
     res.status(500).end();

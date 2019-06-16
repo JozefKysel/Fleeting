@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Home.less';
-import { useState } from 'react';
-import { NavBar, Footer, InputTime, CallPaneReceiver, CallExpired} from '../components';
-import { User } from '../components';
+import { User, NavBar, Footer, InputTime, CallPaneReceiver, CallExpired} from '../components';
 import { listenForIncomingCall } from '../services/CallService';
-import { Router, Link } from "@reach/router";
+import { Router, Link} from "@reach/router";
+import api from '../api-client';
 import { Button } from 'antd';
 import FadeIn from 'react-fade-in';
 import 'antd/lib/button/style';
@@ -20,6 +19,19 @@ function Home(props) {
   const [incomingCall, setIncomingCall] = useState(false);
   const [callExpired, setCallExpired] = useState(false);
   const [incomingTimeData, setIncomingTimeData] = useState({});
+  const [userData, setUserData] = useState(props.location.state.userData);
+
+  useEffect(() => {
+    setUserData(props.location.state.userData);
+  }, []);
+
+  const addToContacts = (contact) => {
+    api.addContact(userData.username, contact)
+      .then(res => res.json())
+      .then(res => userData.contacts.push(res))
+      .catch(e => console.log(e));
+    setUserData(userData);
+  }
 
   const setIncomingCallFlag = (timeData) => {
     setIncomingCall(true)
@@ -66,9 +78,16 @@ function Home(props) {
   } else {
     return (
       <RenderContext.Provider value={{ selectContactToCall, addAContact }}>
-        <div className="NavBar">
-          <NavBar userData={props.location.state.userData}/>
-          <User className="user-profile" userData={props.location.state.userData}/>
+        <div className="Home">
+          <div className="NavBar">
+            <NavBar userData={props.location.state.userData}/>
+          </div>
+          <div className="user-profile">
+            <User addToContacts={addToContacts} userData={userData}/>
+          </div>
+          <div className="Footer">
+            <Footer/>
+          </div>
         </div>
       </RenderContext.Provider>
     );

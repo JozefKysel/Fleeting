@@ -7,8 +7,8 @@ import { RenderContext } from '../../containers/Home';
 
 function Contact({contact}) {
   const { selectContactToCall } = useContext(RenderContext);
-  const handleOnClick = event => {
-    selectContactToCall('contact')
+  const handleOnClick = () => {
+    selectContactToCall('contact');
   }
 
   return (
