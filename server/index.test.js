@@ -1,8 +1,8 @@
 const { server, io, app } = require('./index');
 const PORT = 4567;
 const { createClient, mocks } = require('./utils');
-// const request = require('supertest');
-// const btoa = require('btoa');
+const request = require('supertest');
+const btoa = require('btoa');
 
 beforeAll(async done => await server.listen(PORT, done));
 afterAll(async done => await server.close(done));
@@ -60,27 +60,28 @@ describe('Socket.io', () => {
 
 });
 
-// describe('API', () => {
+describe('API', () => {
 
-//   test('server responds with HTTP 201 - /signup', () => {
-//     return request(app)
-//       .post('/signup')
-//       // .send(mocks.user.email, mocks.user.gender)
-//       // .set({ 'Authorization': `Basic ${btoa(mocks.user.username + ':' + mocks.user.password)}`})
-//       .then(response => expect(response.statusCode).toBe(500));
-//   });
+  test('server responds with HTTP 201 - /signup', () => {
+    return request(app)
+      .post('/signup')
+      .send(mocks.user.email, mocks.user.gender)
+      .set({ 'Authorization': `Basic ${btoa(mocks.user.username + ':' + mocks.user.password)}`})
+      .then(response => expect(response.statusCode).toBe(201));
+  });
 
-//   test('server responds with HTTP 200 - /login', () => {
-//     return request(app)
-//       .post('/login')
-//       // .set({ 'Authorization': `Basic ${btoa(mocks.user.username + ':' + mocks.user.password)}`});
-//       .then(response => expect(response.statusCode).toBe(500));
-//   });
+  test('server responds with HTTP 200 - /login', () => {
+    return request(app)
+      .post('/login')
+      .set({ 'Authorization': `Basic ${btoa(mocks.user.username + ':' + mocks.user.password)}`})
+      .then(response => expect(response.statusCode).toBe(200));
+  });
 
-//   test('server responds with HTTP 200 - /home', () => {
-//     return request(app)
-//       .get('/home')
-//       .then(response => expect(response.statusCode).toBe(403));
-//   });
+  test('server responds with HTTP 403 - /login', () => {
+    return request(app)
+      .post('/login')
+      .set({ 'Authorization': `Basic ${btoa(mocks.badUser.username + ':' + mocks.badUser.password)}`})
+      .then(response => expect(response.statusCode).toBe(403));
+  });
 
-// });
+});
