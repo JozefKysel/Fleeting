@@ -7,6 +7,7 @@ import 'antd/lib/button/style';
 import api from '../api-client';
 import { Button } from 'antd';
 import './Home.less';
+import jwtDecode from 'jwt-decode';
 
 
 export const RenderContext = React.createContext(null);
@@ -19,11 +20,13 @@ function Home(props) {
   const [incomingCall, setIncomingCall] = useState(false);
   const [callExpired, setCallExpired] = useState(false);
   const [incomingTimeData, setIncomingTimeData] = useState({});
-  const [userData, setUserData] = useState(props.location.state.userData);
+  const [userData, setUserData] = useState({});
   const [contacts, setUserContacts] = useState({});
 
   useEffect(() => {
-    setUserContacts(props.location.state.userData.contacts)
+    const { user } = jwtDecode(window.localStorage.getItem('access_token'));
+    setUserContacts(user.contacts);
+    setUserData(user);
   }, [])
 
   const addToContacts = (contact) => {
@@ -88,7 +91,7 @@ function Home(props) {
        }}>
         <div className="Home">
           <div className="NavBar">
-            <NavBar userData={props.location.state.userData}/>
+            <NavBar userData={userData}/>
           </div>
           <div className="user-profile">
             <User/>
