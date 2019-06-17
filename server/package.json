@@ -4,20 +4,28 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "atob": "^2.1.2",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
+<<<<<<< HEAD
     "circular-json": "^0.5.9",
+=======
+    "btoa": "^1.2.1",
+>>>>>>> 17deaba109e87f946f4b152264fe556f20df1681
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "jest": "^24.8.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.2.7",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.2.0",
+    "superagent": "^5.1.0",
+    "supertest": "^4.0.2"
   }
 }
