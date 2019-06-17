@@ -6,7 +6,7 @@ import { useContext } from 'react';
 import { RenderContext } from '../../containers/Home';
 
 function Contact({contact}) {
-  const { selectContactToCall } = useContext(RenderContext);
+  const { selectContactToCall, addToContacts } = useContext(RenderContext);
   const handleOnClick = () => {
     selectContactToCall('contact');
   }
@@ -15,12 +15,12 @@ function Contact({contact}) {
     <div>
       <div className="DB">
         <div className="line">
-          <img src={contact.gender === 'male' ? maleAvatar : femaleAvatar} alt="Avatar" style={{ width: 50, height: 50, borderRadius: 50 }} />
+        <img src={contact.gender === 'male' ? maleAvatar : femaleAvatar} alt="Avatar" style={{ width: 50, height: 50, borderRadius: 50 }} />
         </div>
         <span className="name">{contact.username}</span >
         <span className="calldata">{contact.callLengths}</span>
         <Icon onClick={handleOnClick} type="phone"  className="phone" style={{ fontSize: '22px', color: 'rgba(87, 141, 241)' }} />
-        <Icon type="star"  className="star" style={{ fontSize: '22px', color: 'rgba(87, 141, 241)' }} />
+        <Icon onClick={() => addToContacts(contact)} type="star"  className="star" style={{ fontSize: '22px', color: 'rgba(87, 141, 241)' }} />
       </div>
       <div>
       </div>

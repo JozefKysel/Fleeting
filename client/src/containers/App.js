@@ -1,10 +1,9 @@
 import React from 'react';
-import './App.less';
-import Home from './Home'
-import { Signup, Login, Footer } from '../components';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Signup, Login, Footer } from '../components';
 import { PrivateRoutes } from '../components';
-
+import Home from './Home'
+import './App.less';
 
 function App() {
 

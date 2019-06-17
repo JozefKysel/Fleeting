@@ -12,16 +12,19 @@ function Login() {
 
   const onUsername = (e) => setUsername(e.target.value);
   const onPassword = (e) => setPassword(e.target.value);
+
+  const saveToken = (res) => {
+    window.localStorage.setItem('access_token', res.token);
+    setUser(res.user);
+    setToken(res.token);
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (username && password) {
       api.logUserIn(username, password)
         .then(res => res.json())
-        .then(res => {
-          window.localStorage.setItem('access_token', res.token);
-          setUser(res.user);
-          setToken(res.token);
-        })
+        .then(res => saveToken(res))
         .catch(e => console.log(e));
       setUsername('');
       setPassword('');

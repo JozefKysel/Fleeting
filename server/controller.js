@@ -34,10 +34,12 @@ exports.postLoginUser = async (req, res) => {
 };
 
 exports.getAll = async (req, res) => {
+  console.log(req);
   try {
     jwt.verify(req.token, 'secretkey', error => error && res.status(403).end());
     res.json(await users.get(req.params.username));
   } catch (e) {
+    console.log(e)
     res.status(500).end();
   }
 }
@@ -55,15 +57,16 @@ exports.getAll = async (req, res) => {
 
 exports.putNewContact = async (req, res) => {
   const { username } = req.params;
-  const { newContact } = req.body;
+  const newContact = req.body;
   try {
     jwt.verify(req.token, 'secretkey', error => error && res.status(403).end());
     if (newContact && username) {
-      const contacts = await users.get(username).contacts;
-      contacts.push(newContact);
-      await users.update(username, contacts);
+      const user = await users.get(username);
+      user.contacts.push(newContact);
+      const contacts = user.contacts;
+      const response = await users.update(username, user.contacts);
       res.status(200).json({ contacts });
-    } else res.status(500).end();
+    }
   } catch (error) {
     res.status(500).end();
   }

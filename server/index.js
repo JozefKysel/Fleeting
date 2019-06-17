@@ -18,7 +18,6 @@ app.use(cors());
 app.use(express.json());
 app.use(router);
 
-
 const server = https.createServer(serverConfig, app);
 const io = socketIo(server);
 

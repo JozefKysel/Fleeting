@@ -27,8 +27,9 @@ exports.get = async username => {
 };
 
 exports.update = (username, property) => {
-  return db.conn.collection('users').findOneAndUpdate(
+  const response = db.conn.collection('users').findOneAndUpdate(
     { username },
-    { property }
+    { $set: {contacts: property }}
   );
+  return response;
 };

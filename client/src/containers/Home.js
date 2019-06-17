@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import './Home.less';
-import { User, NavBar, Footer, InputTime, CallPaneReceiver, CallExpired} from '../components';
 import { listenForIncomingCall } from '../services/CallService';
+import { User, NavBar, Footer, InputTime, CallPaneReceiver, CallExpired} from '../components';
 import { Router, Link} from "@reach/router";
-import api from '../api-client';
-import { Button } from 'antd';
 import FadeIn from 'react-fade-in';
 import 'antd/lib/button/style';
+import api from '../api-client';
+import { Button } from 'antd';
+import './Home.less';
 
 
 export const RenderContext = React.createContext(null);
@@ -20,17 +20,17 @@ function Home(props) {
   const [callExpired, setCallExpired] = useState(false);
   const [incomingTimeData, setIncomingTimeData] = useState({});
   const [userData, setUserData] = useState(props.location.state.userData);
+  const [contacts, setUserContacts] = useState({});
 
-  useEffect(() => {
-    setUserData(props.location.state.userData);
-  }, []);
+  useEffect(() => {
+    setUserContacts(props.location.state.userData.contacts)
+  }, [])
 
   const addToContacts = (contact) => {
     api.addContact(userData.username, contact)
       .then(res => res.json())
-      .then(res => userData.contacts.push(res))
+      .then(res => setUserContacts(res.contacts))
       .catch(e => console.log(e));
-    setUserData(userData);
   }
 
   const setIncomingCallFlag = (timeData) => {
@@ -63,7 +63,10 @@ function Home(props) {
     return (
       <div>
         <CallerContext.Provider >
-          <CallPaneReceiver value={{ incomingTimeData, callHasExpired }} />
+          <CallPaneReceiver value={{
+            incomingTimeData,
+            callHasExpired,
+          }} />
         </CallerContext.Provider>
       </div>
     )
@@ -77,13 +80,18 @@ function Home(props) {
     )
   } else {
     return (
-      <RenderContext.Provider value={{ selectContactToCall, addAContact }}>
+      <RenderContext.Provider value={{
+        selectContactToCall,
+        addToContacts,
+        userData,
+        contacts
+       }}>
         <div className="Home">
           <div className="NavBar">
             <NavBar userData={props.location.state.userData}/>
           </div>
           <div className="user-profile">
-            <User addToContacts={addToContacts} userData={userData}/>
+            <User/>
           </div>
           <div className="Footer">
             <Footer/>

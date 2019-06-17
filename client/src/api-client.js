@@ -14,11 +14,12 @@ exports.saveUser = (username, password, email, gender) => fetch('https://localh
 
 exports.addContact = (username, contact) => fetch(`https://localhost:4001/add/${username}`, {
   method: 'PUT',
+  body: JSON.stringify(contact),
   headers: {
-    'Authorization': `Bearer: ${window.localStorage.getItem('access_token')}`
-  },
-  body: JSON.stringify({newContact: contact})
-})
+    'Authorization': `Bearer: ${window.localStorage.getItem('access_token')}`,
+    'Content-Type': 'application/json'
+  }
+});
 
 exports.logUserIn = (username, password) => fetch('https://localhost:4001/login', {
   method: 'POST',
