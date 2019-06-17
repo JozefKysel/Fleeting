@@ -10,7 +10,7 @@ exports.postSignupUser = async (req, res) => {
     password = await bcrypt.hash(password, 10);
     const setUser = await users.set(req.body.email, username, password, req.body.gender);
     res.json({ setUser });
-    res.status(200).end();
+    res.status(201).end();
   } catch (error) {
     res.status(500).end();
   }
@@ -24,7 +24,7 @@ exports.postLoginUser = async (req, res) => {
     user
       ? bcrypt.compare(password, user.password, (_, same) => {
           same === true
-            ? jwt.sign({user}, 'secretkey', (_, token) => res.json({ token, user }))
+            ? jwt.sign({user}, 'secretkey', (_, token) => res.json({ token, user }).status(200).end())
             : res.status(403).end();
         })
       : res.status(403).end();
@@ -37,8 +37,8 @@ exports.getUserData = async (req, res) => {
   try {
     jwt.verify(req.token, 'secretkey', error => error && res.status(403).end());
     req.headers.username
-      ? res.json({ user: await users.get(req.headers.username) })
-      : res.status(500).end();
+      ? res.json({ user: await users.get(req.headers.username) }).status(200).end()
+      : res.status(403).end();
   } catch (error) {
     res.status(500).end();
   }

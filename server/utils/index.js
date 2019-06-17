@@ -1,3 +1,4 @@
 const createClient = require('./testUtils');
+const mocks = require('./testMocks');
 
-module.exports = { createClient };
+module.exports = { createClient, mocks };
