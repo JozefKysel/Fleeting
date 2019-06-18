@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { useState, useContext } from 'react';
 import { CallerContext } from '../../containers/Home';
-import './Countdown.less'
+import './Countdown.less';
+import { listenForCallLength } from '../../services/CallService';
 
 function Countdown(props) {
 
@@ -19,13 +20,17 @@ function Countdown(props) {
       setTime(time => time - interval);
     }, interval);
 
-  }, [])
+  }, []);
 
-  if (!props.callee) {
-    if (time === 0) {
-      callHasExpired(true)
-    }
+  const setIncomingCallFlag = (timeData) => {
+    setTime(timeData);
   }
+
+  listenForCallLength(setIncomingCallFlag);
+
+  if (time === 0) {
+    callHasExpired(true)
+  };
 
   if (time > 5000) {
   return (

@@ -6,6 +6,7 @@ const btoa = require('btoa');
 
 beforeAll(async done => await server.listen(PORT, done));
 afterAll(async done => await server.close(done));
+// close db and socket
 
 
 describe('Socket.io', () => {
@@ -38,25 +39,7 @@ describe('Socket.io', () => {
     });
   });
 
-  // test('server logs an error if one occurs', async done => {
-  //   const client1 = await createClient(PORT);
-  //   const error = Error('An error has occurred');
-  //   console.log('here');
-    
-  //   client1.emit('error', error);
-  //   io.on('connection', socket => {
-  //     console.log('entrato');
-  //     done();
-  //     socket.on('error', data => {
-  //       expect(data).toBe(error);
-  //       client1.disconnect();
-  //       socket.disconnect();
-  //       io.disconnect();
-  //       done();
-  //     });
-  //   });
-
-  // });
+  test.todo('broadcasts the call to all clients connected')
 
 });
 
@@ -83,5 +66,13 @@ describe('API', () => {
       .set({ 'Authorization': `Basic ${btoa(mocks.badUser.username + ':' + mocks.badUser.password)}`})
       .then(response => expect(response.statusCode).toBe(403));
   });
+
+  test.todo('new user after signup should appear in search');
+
+  test.todo('should not be able to add a contact that is not in the db / search');
+
+  test.todo('should not be able to sign up with a username that already exists');
+
+  test.todo('should not be able to add a contact that is already in the contacts');
 
 });

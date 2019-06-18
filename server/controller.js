@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 exports.postSignupUser = async (req, res) => {
   try {
-    const decoded = atob(req.headers.authorization.split(' ')[1]);
+    const decoded = atob(req.headers.authorization.split(' ')[1]);// should be in body
     let [ username, password ] = decoded.split(':');
     password = await bcrypt.hash(password, 10);
     const setUser = await users.set(req.body.email, username, password, req.body.gender);

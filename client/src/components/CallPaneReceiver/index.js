@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect, useRef } from 'react';
 import { CountdownReceiver } from '..';
-import { start, setSrcObjectRemote } from '../../services/CallService'
+import { getRemoteStream } from '../../services/CallService'
 import './CallPaneReceiver.less'
 
 function CallPaneReceiver(props) {
@@ -9,7 +9,9 @@ function CallPaneReceiver(props) {
   const remoteVideo = useRef(null);
 
   useEffect(() => {
-    start(false, () => setSrcObjectRemote(remoteVideo.current))
+    getRemoteStream(remoteStream => {
+      remoteVideo.current.srcObject = remoteStream;
+    })
   }, []);
 
   if (props.value.incomingTimeData.callLength) {

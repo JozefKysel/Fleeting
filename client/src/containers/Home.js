@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { listenForIncomingCall } from '../services/CallService';
+import { listenForIncomingCall, listenForCallLength } from '../services/CallService';
 import { User, NavBar, Footer, InputTime, CallPaneReceiver, CallExpired} from '../components';
 import { Router, Link} from "@reach/router";
 import FadeIn from 'react-fade-in';
@@ -27,6 +27,9 @@ function Home(props) {
     const { user } = jwtDecode(window.localStorage.getItem('access_token'));
     setUserContacts(user.contacts);
     setUserData(user);
+
+    listenForIncomingCall()
+    listenForCallLength(setIncomingCallFlag);
   }, [])
 
   const addToContacts = (contact) => {
@@ -40,8 +43,6 @@ function Home(props) {
     setIncomingCall(true)
     setIncomingTimeData(timeData)
   }
-
-  listenForIncomingCall(setIncomingCallFlag)
 
   const addAContact = (flag) => {
     setCreateContact(flag)

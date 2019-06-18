@@ -23,6 +23,7 @@ const io = socketIo(server);
 
 io.on('connection', socket => {
   socket.on('outgoing call', data => socket.broadcast.emit('incoming call', data));
+  socket.on('accepted call', data => io.emit('callLength', data));
   socket.on('message', message => socket.broadcast.emit('message', message));
   socket.on('error', error => console.log(error));
   socket.on('disconnect', () => process.env.NODE_ENV !== 'test' && console.log('Client disconnected'));

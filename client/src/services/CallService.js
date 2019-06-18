@@ -4,6 +4,7 @@ let localStream;
 let remoteStream;
 let peerConnection;
 let uuid;
+let globalCb;
 
 const peerConnectionConfig = {
   'iceServers': [
@@ -44,24 +45,29 @@ export function setSrcObject(localVideo) {
 //  CALL ONCLICK
 export function start(isCaller, cb) {
   console.log('start');
-    peerConnection = new RTCPeerConnection(peerConnectionConfig);
-    console.log(peerConnection);
-    peerConnection.onicecandidate = gotIceCandidate;
-    peerConnection.ontrack = (event) => {
-      console.log(event);
-      gotRemoteStream(event);
-      if(typeof cb === 'function') cb();
-    }
-    peerConnection.addStream(localStream);
-    if (isCaller) {
-      peerConnection.createOffer().then(createdDescription).catch(errorHandler);
-    }
+  remoteStream = null;
+  peerConnection = new RTCPeerConnection(peerConnectionConfig);
+  peerConnection.onicecandidate = gotIceCandidate;
+  peerConnection.ontrack = (event) => {
+    remoteStream = event.streams[0];
+    if(typeof cb === 'function') cb(remoteStream);
+    if(typeof globalCb === 'function') globalCb(remoteStream);
+  }
+  peerConnection.addStream(localStream);
+  if (isCaller) {
+    peerConnection.createOffer().then(createdDescription).catch(errorHandler);
+  }
+}
+
+
+export function getRemoteStream(cb) {
+  if(remoteStream!==null) return cb(remoteStream);
+  globalCb = cb;
 }
 
 // ===================================================================
 
 function gotMessageFromServer(data) {
-  console.log('got message', data);
   if (!peerConnection) start(false);
 
   var signal = JSON.parse(data);
@@ -94,17 +100,6 @@ function createdDescription(description) {
   }).catch(errorHandler);
 }
 
-
-function gotRemoteStream(event) {
-  console.log('got remote stream');
-  remoteStream = event.streams[0];
-}
-
-export function setSrcObjectRemote(remoteVideo) {
-  console.log('set src object')
-  remoteVideo.srcObject = remoteStream;
-}
-
 function errorHandler(error) {
   console.error(error);
 }
@@ -117,13 +112,16 @@ function createUUID() {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }
 
-export const listenForIncomingCall = (toggleFlag) => {
-  socket.on("incoming call", data => {
-    window.confirm(`Tom is calling you, do you want to answer?`)
-    toggleFlag(data)
-  })
-}
-
 export const makeOutGoing = (data, message) => {
   socket.emit('outgoing call', data);
 }
+
+export const listenForIncomingCall = () => {
+  socket.on("incoming call", data => {
+    window.confirm(`Tom is calling you, do you want to answer?`) && socket.emit('accepted call', data);
+  })
+}
+
+export const listenForCallLength = toggleFlag => {
+  socket.on('callLength', data => toggleFlag(data));
+};
