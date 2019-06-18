@@ -46,7 +46,7 @@ exports.update = async (username, property) => {
 };
 
 exports.delete = async username => {
-  const response = await db.conn.collection('users').deleteOne(
+  const response = await db.conn.collection('users').findOneAndDelete(
     { username }
   );
   return response;

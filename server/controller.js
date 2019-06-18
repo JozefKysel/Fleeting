@@ -97,21 +97,22 @@ exports.putNewCallLength = async (req, res) => {
 exports.deleteUserAccount = async (req, res) => {
   try {
     jwt.verify(req.token, 'secretkey', error => error && res.status(403).end());
-
-    const decoded = atob(req.headers.authorization.split(' ')[1]);
+    
+    const decoded = atob(req.headers.authorizationfordelete.split(' ')[1]);
     const [ username, password ] = decoded.split(':');
     const user = await users.get(username);
-    ! user && res.status(403).end();
-
-    userInfo && bcrypt.compare(password, user.password, async (_, same) => {
-      if (same === true) {
-        const result = await users.delete(username);
-        res.status(200);
-        res.send(result);
-      } else {
-        res.status(403).end();
-      }
-    });
+    
+    user
+      ? bcrypt.compare(password, user.password, async (_, same) => {
+          if (same === true) {
+            const result = await users.delete(username);
+            res.status(200);
+            res.send(result);
+          } else {
+            res.status(403).end();
+          }
+        })
+      : res.status(403).end();
   } catch (error) {
     res.status(500).end();
   }

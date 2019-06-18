@@ -7,16 +7,7 @@ const btoa = require('btoa');
 let token;
 
 beforeAll(done => server.listen(PORT, done));
-afterAll(async done => {
-  await request(app)
-    .delete('/delete-account')
-    .set({
-      'Authorization': `Bearer ${token}`,
-      'AuthorizationForDelete': `Basic ${btoa(mocks.user.username + ':' + mocks.user.password)}`
-    });
-  await db.MongoClient.close();
-  server.close(done);
-});
+afterAll(done => server.close() && db.MongoClient.close(done));
 
 
 describe('Socket.io', () => {
@@ -108,6 +99,7 @@ describe('API', () => {
         gender: mocks.user.gender
       })
       .then(response => {
+        // console.log(response.body);
         // expect(response.body.userData.email).toBe(mocks.user.email);
         // expect(response.body.userData.username).toBe(mocks.user.username);
         // expect(response.body.userData.password).toBeDefined();
@@ -133,37 +125,47 @@ describe('API', () => {
         expect(response.body.error).toBe('Username already exists');
         expect(response.statusCode).toBe(409);
       });
-  });
-
+    });
+    
   test.todo('responds with HTTP 200 - /signup account with this email already exists');
-
+  
   test('responds with HTTP 200 - /login user', () => {
     return request(app)
-      .post('/login')
-      .set({
-        'Authorization': `Basic ${btoa(mocks.user.username + ':' + mocks.user.password)}`
-      })
-      .then(response => {
-        token = response.body.token;
-        expect(response.body.token).toBeDefined();
-        expect(response.statusCode).toBe(200);
-      });
+    .post('/login')
+    .set({
+      'Authorization': `Basic ${btoa(mocks.user.username + ':' + mocks.user.password)}`
+    })
+    .then(response => {
+      token = response.body.token;
+      expect(response.body.token).toBeDefined();
+      expect(response.statusCode).toBe(200);
+    });
   });
 
+  test('responds with HTTP 200 - /delete-account', () => {
+    return request(app)
+      .delete('/delete-account')
+      .set({
+        'Authorization': `Bearer ${token}`,
+        'AuthorizationForDelete': `Basic ${btoa(mocks.user.username + ':' + mocks.user.password)}`
+      })
+      .expect(200);
+  });
+  
   test('responds with HTTP 403 - /login badUser', () => {
     return request(app)
-      .post('/login')
-      .set({
-        'Authorization': `Basic ${btoa(mocks.badUser.username + ':' + mocks.badUser.password)}`
-      })
-      .expect(403);
+    .post('/login')
+    .set({
+      'Authorization': `Basic ${btoa(mocks.badUser.username + ':' + mocks.badUser.password)}`
+    })
+    .expect(403);
   });
-
+  
   test.todo('new user after signup should appear in search');
-
+  
   test.todo('should not be able to add a contact that is not in the db / search');
-
-
+  
+  
   test.todo('should not be able to add a contact that is already in the contacts');
-
+  
 });
