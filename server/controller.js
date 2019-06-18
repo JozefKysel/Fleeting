@@ -5,12 +5,18 @@ const jwt = require('jsonwebtoken');
 
 exports.postSignupUser = async (req, res) => {
   try {
-    const decoded = atob(req.headers.authorization.split(' ')[1]);// should be in body
+    const decoded = atob(req.body.authorization.split(' ')[1]);
     let [ username, password ] = decoded.split(':');
     password = await bcrypt.hash(password, 10);
+    
+    const userAlreadyExists = users.get(username);
+    if (userAlreadyExists) res.status(409) && res.json({error: 'Username already exists'});
+
     const setUser = await users.set(req.body.email, username, password, req.body.gender);
-    res.status(201);
-    res.json({ setUser });
+    const userData = setUser.ops[0];
+    setUser && userData
+      ? res.status(201) && res.json({ userData })
+      : res.status(500).end();
   } catch (error) {
     res.status(500).end();
   }
@@ -21,18 +27,18 @@ exports.postLoginUser = async (req, res) => {
     const decoded = atob(req.headers.authorization.split(' ')[1]);
     const [ username, password ] = decoded.split(':');
     const user = await users.get(username);
+    ! user && res.status(403).end();
+
     const { _id, email } = user;
     const userInfo = {
       _id,
       email
     };
-    userInfo
-      ? bcrypt.compare(password, user.password, (_, same) => {
-          same === true
-            ? jwt.sign({userInfo}, 'secretkey', (_, token) => res.status(200).json({ token, user }))
-            : res.status(403).end();
-        })
-      : res.status(403).end();
+    userInfo && bcrypt.compare(password, user.password, (_, same) => {
+      same === true
+        ? jwt.sign({userInfo}, 'secretkey', (_, token) => res.status(200).json({ token }))
+        : res.status(403).end();
+    });
   } catch (error) {
     res.status(500).end();
   }
@@ -83,6 +89,29 @@ exports.putNewCallLength = async (req, res) => {
       await users.update(username, callLengths);
       res.json({ callLengths });
     } else res.status(500).end();
+  } catch (error) {
+    res.status(500).end();
+  }
+};
+
+exports.deleteUserAccount = async (req, res) => {
+  try {
+    jwt.verify(req.token, 'secretkey', error => error && res.status(403).end());
+
+    const decoded = atob(req.headers.authorization.split(' ')[1]);
+    const [ username, password ] = decoded.split(':');
+    const user = await users.get(username);
+    ! user && res.status(403).end();
+
+    userInfo && bcrypt.compare(password, user.password, async (_, same) => {
+      if (same === true) {
+        const result = await users.delete(username);
+        res.status(200);
+        res.send(result);
+      } else {
+        res.status(403).end();
+      }
+    });
   } catch (error) {
     res.status(500).end();
   }

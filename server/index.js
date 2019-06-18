@@ -31,4 +31,4 @@ io.on('connection', socket => {
 
 process.env.NODE_ENV !== 'test' && server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
-module.exports = { server, io, app };
+module.exports = { server, app };

@@ -17,7 +17,6 @@ exports.getData = async email => {
     const response = await db.conn.collection('users').findOne({
       email: email
     });
-    console.log(response);
     return response;
   } catch(e) {
     console.log(e);
@@ -26,7 +25,6 @@ exports.getData = async email => {
 
 exports.get = async username => {
   try {
-    console.log(username);
     const searchExpression = new RegExp(username, 'i');
     const response = await db.conn.collection('users').findOne({
     username: {
@@ -39,10 +37,17 @@ exports.get = async username => {
   }
 };
 
-exports.update = (username, property) => {
-  const response = db.conn.collection('users').findOneAndUpdate(
+exports.update = async (username, property) => {
+  const response = await db.conn.collection('users').findOneAndUpdate(
     { username },
     { $set: {contacts: property }}
+  );
+  return response;
+};
+
+exports.delete = async username => {
+  const response = await db.conn.collection('users').deleteOne(
+    { username }
   );
   return response;
 };

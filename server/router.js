@@ -2,7 +2,7 @@ const router = require('express').Router();
 const controller = require('./controller');
 
 const verifyToken = (req, res, next) => {
-  const bearerHeader = req.headers['authorization'];
+  const bearerHeader = req.headers['Authorization'];
   if (typeof bearerHeader !== 'undefined') {
     const bearer = bearerHeader.split(' ');
     const bearerToken = bearer[1];
@@ -17,5 +17,6 @@ router.get('/search/:username', verifyToken, controller.getAll);
 router.put('/add/:username', verifyToken, controller.putNewContact);
 router.get('/user/:email', verifyToken, controller.getData);
 // router.put('/call-done', verifyToken, controller.putNewCallLength);
+router.delete('/delete-account', verifyToken, controller.deleteUserAccount)
 
 module.exports = router;
