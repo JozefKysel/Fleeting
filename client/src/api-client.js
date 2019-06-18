@@ -28,6 +28,13 @@ exports.logUserIn = (username, password) => fetch('https://localhost:4001/login'
   }
 });
 
+exports.getUserData = (email) => fetch(`https://localhost:4001/user/${email}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': `Bearer ${window.localStorage.getItem('access_token')}`,
+  }
+});
+
 exports.searchForUsers = (username) => fetch(`https://localhost:4001/search/${username}`, {
   method: 'GET',
   headers: {
