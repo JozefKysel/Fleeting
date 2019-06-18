@@ -113,12 +113,16 @@ function createUUID() {
 }
 
 export const makeOutGoing = (data, message) => {
+  console.log('make out going',data);
   socket.emit('outgoing call', data);
 }
 
-export const listenForIncomingCall = () => {
+export const listenForIncomingCall = (props) => {
   socket.on("incoming call", data => {
-    window.confirm(`Tom is calling you, do you want to answer?`) && socket.emit('accepted call', data);
+    if (window.confirm(`Tom is calling you, do you want to answer?`)) {
+      socket.emit('accepted call', data);
+      props.history.push('/callee');
+    }
   })
 }
 

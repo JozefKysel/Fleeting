@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'antd';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Home from '../../containers/Home'
 import './CallExpired.less'
 
@@ -21,8 +22,7 @@ function CallExpired() {
           <div className="prompt">
         Call Expired!
           </div>
-      <Button onClick={() => setHome(true)} size="large">Home</Button>
-      <Button size="large">Share</Button>
+      <Link to="/"><Button size="large">Home</Button></Link>
         </div>
       </div>
     )

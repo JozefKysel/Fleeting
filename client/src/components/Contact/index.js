@@ -4,12 +4,10 @@ import femaleAvatar from '../../assets/img_avatar2.png';
 import { Icon } from 'antd';
 import { useContext } from 'react';
 import { RenderContext } from '../../containers/Home';
+import { Link } from 'react-router-dom';
 
 function Contact({contact}) {
-  const { selectContactToCall, addToContacts } = useContext(RenderContext);
-  const handleOnClick = () => {
-    selectContactToCall('contact');
-  }
+  const { addToContacts } = useContext(RenderContext);
 
   return (
     <div>
@@ -19,7 +17,7 @@ function Contact({contact}) {
         </div>
         <span className="name">{contact.username}</span >
         <span className="calldata">{contact.callLengths}</span>
-        <Icon onClick={handleOnClick} type="phone"  className="phone" style={{ fontSize: '22px', color: 'rgba(87, 141, 241)' }} />
+        <Link to="/input"><Icon type="phone"  className="phone" style={{ fontSize: '22px', color: 'rgba(87, 141, 241)' }} /></Link>
         <Icon onClick={() => addToContacts(contact)} type="star"  className="star" style={{ fontSize: '22px', color: 'rgba(87, 141, 241)' }} />
       </div>
       <div>

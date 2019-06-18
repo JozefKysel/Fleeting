@@ -14,11 +14,7 @@ export const RenderContext = React.createContext(null);
 export const CallerContext = React.createContext(null);
 
 function Home(props) {
-  const [createContact, setCreateContact] = useState(false);
-  const [selectContact, setSelectContact] = useState('');
-  const [goToTimeInput, setGoToTimeInput] = useState(false);
-  const [incomingCall, setIncomingCall] = useState(false);
-  const [callExpired, setCallExpired] = useState(false);
+
   const [incomingTimeData, setIncomingTimeData] = useState({});
   const [userData, setUserData] = useState({});
   const [contacts, setUserContacts] = useState({});
@@ -31,7 +27,7 @@ function Home(props) {
         setUserData(res);
         setUserContacts(res.contacts);
       });
-    listenForIncomingCall()
+    listenForIncomingCall(props)
     listenForCallLength(setIncomingCallFlag);
   }, [])
 
@@ -45,70 +41,36 @@ function Home(props) {
   }
 
   const setIncomingCallFlag = (timeData) => {
-    setIncomingCall(true)
     setIncomingTimeData(timeData)
   }
 
-  const addAContact = (flag) => {
-    setCreateContact(flag)
+  const logout = () => {
+    window.localStorage.clear();
+    props.history.push('/login');
   }
 
-  const selectContactToCall = (contact) => {
-    setSelectContact(contact)
-    setGoToTimeInput(true)
-  }
-
-  const callHasExpired = (flag) => {
-    setCallExpired(flag)
-  }
-
-  if (callExpired) {
-    return (
-      <div>
-        <CallExpired />
-      </div>
-    )
-  } else if (incomingCall && incomingTimeData) {
-    return (
-      <div>
-        <CallerContext.Provider >
-          <CallPaneReceiver value={{
-            incomingTimeData,
-            callHasExpired,
-          }} />
-        </CallerContext.Provider>
-      </div>
-    )
-  } else if (goToTimeInput && selectContact) {
-    return (
-      <div>
-        <CallerContext.Provider value={{ callHasExpired }}>
-          <InputTime />
-        </CallerContext.Provider>
-      </div>
-    )
-  } else {
-    return (
-      <RenderContext.Provider value={{
-        selectContactToCall,
-        addToContacts,
-        userData,
-        contacts
-       }}>
-        <div className="Home">
-          <div className="NavBar">
-            <NavBar userData={userData}/>
-          </div>
-          <div className="user-profile">
-            <User/>
-          </div>
-          <div className="Footer">
-            <Footer/>
-          </div>
+  return (
+    <RenderContext.Provider value={{
+      addToContacts,
+      userData,
+      contacts
+     }}>
+      <div className="Home">
+        <div className="NavBar">
+          <NavBar userData={userData}/>
         </div>
-      </RenderContext.Provider>
-    );
-  }
+        <div className="user-profile">
+          <User/>
+        </div>
+        <FadeIn>
+          <Button size="small" onClick={logout}></Button>
+        </FadeIn>
+        <div className="Footer">
+          <Footer/>
+        </div>
+      </div>
+    </RenderContext.Provider>
+  );
 }
 
 export default Home;

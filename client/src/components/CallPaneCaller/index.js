@@ -5,7 +5,6 @@ import { start, setSrcObjectRemote, makeOutGoing, getRemoteStream } from '../../
 import './CallPaneCaller.less'
 
 function CallPaneCaller(props) {
-
   const [view, setView] = useState(false);
   const remoteVideo = useRef(null);
 
@@ -15,10 +14,10 @@ function CallPaneCaller(props) {
 
   const handleOnClick = () => {
     start(true);
-    makeOutGoing(props);
+    makeOutGoing(props.location.state.timeData);
     setView(true)
   }
-  
+
   return (
     <>
       <div className="ready" style={{opacity: view ? 0: 1}}>
@@ -32,7 +31,7 @@ function CallPaneCaller(props) {
       </div>
       <div className="video" style={{opacity: view ? 1: 0}}>
         <video autoPlay style={{ width: '100%' }} ref={remoteVideo} />
-        <Countdown timeData={props} />
+        <Countdown/>
       </div>
     </>
   );
