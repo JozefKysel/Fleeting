@@ -24,19 +24,24 @@ function Home(props) {
   const [contacts, setUserContacts] = useState({});
 
   useEffect(() => {
-    const { user } = jwtDecode(window.localStorage.getItem('access_token'));
-    setUserContacts(user.contacts);
-    setUserData(user);
-
+    const { userInfo } = jwtDecode(window.localStorage.getItem('access_token'));
+    api.getUserData(userInfo.email)
+      .then(res => res.json())
+      .then(res => {
+        setUserData(res);
+        setUserContacts(res.contacts);
+      });
     listenForIncomingCall()
     listenForCallLength(setIncomingCallFlag);
   }, [])
 
   const addToContacts = (contact) => {
-    api.addContact(userData.username, contact)
+    if (!contacts.some(element => element._id === contact._id) && userData._id !== contact._id) {
+      api.addContact(userData.username, contact)
       .then(res => res.json())
       .then(res => setUserContacts(res.contacts))
       .catch(e => console.log(e));
+    }
   }
 
   const setIncomingCallFlag = (timeData) => {

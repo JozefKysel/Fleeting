@@ -12,8 +12,21 @@ exports.set = (email, username, password, gender) => {
   });
 };
 
+exports.getData = async email => {
+  try {
+    const response = await db.conn.collection('users').findOne({
+      email: email
+    });
+    console.log(response);
+    return response;
+  } catch(e) {
+    console.log(e);
+  }
+}
+
 exports.get = async username => {
   try {
+    console.log(username);
     const searchExpression = new RegExp(username, 'i');
     const response = await db.conn.collection('users').findOne({
     username: {
