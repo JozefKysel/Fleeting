@@ -37,13 +37,21 @@ exports.get = async username => {
   }
 };
 
+exports.getByUsername = async username => {
+  try {
+    const result = await db.conn.collection('users').findOne({
+      username: username
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.getByEmail = async email => {
   try {
-    const searchExpression = new RegExp(email, 'i');
     const result = await db.conn.collection('users').findOne({
-      email: {
-        $regex: searchExpression
-      }
+      email: email
     });
     return result;
   } catch (error) {

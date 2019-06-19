@@ -5,12 +5,14 @@ const jwt = require('jsonwebtoken');
 
 exports.postSignupUser = async (req, res) => {
   try {
+    console.log('HERE')
     const decoded = atob(req.body.authorization.split(' ')[1]);
     let [ username, password ] = decoded.split(':');
     password = await bcrypt.hash(password, 10);
     
-    const usernameAlreadyExists = await users.get(username);
+    const usernameAlreadyExists = await users.getByUsername(username);
     const emailAlreadyExists = await users.getByEmail(req.body.email);
+
     if (usernameAlreadyExists) {
       res.status(409);
       res.json({error: 'Username already exists'});
@@ -33,7 +35,7 @@ exports.postLoginUser = async (req, res) => {
   try {
     const decoded = atob(req.headers.authorization.split(' ')[1]);
     const [ username, password ] = decoded.split(':');
-    const user = await users.get(username);
+    const user = await users.getByUsername(username);
     ! user && res.status(403).end();
 
     const { _id, email } = user;
@@ -107,7 +109,7 @@ exports.deleteUserAccount = async (req, res) => {
     
     const decoded = atob(req.headers.authorizationfordelete.split(' ')[1]);
     const [ username, password ] = decoded.split(':');
-    const user = await users.get(username);
+    const user = await users.getByUsername(username);
     
     user
       ? bcrypt.compare(password, user.password, async (_, same) => {

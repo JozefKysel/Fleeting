@@ -5,38 +5,38 @@ const { createClient, mocks } = require('./utils');
 const request = require('supertest');
 const btoa = require('btoa');
 let token;
-// let testToken;
+let testToken;
 
-beforeAll(done => {
+beforeAll(async done => {
   server.listen(PORT);
   
-  // await request(app)
-  //   .post('/signup')
-  //   .send({
-  //     authorization: `Basic ${btoa(mocks.testUser.username + ':' + mocks.testUser.password)}`,
-  //     email: mocks.testUser.email,
-  //     gender: mocks.testUser.gender
-  //   });
+  await request(app)
+    .post('/signup')
+    .send({
+      authorization: `Basic ${btoa(mocks.testUser.username + ':' + mocks.testUser.password)}`,
+      email: mocks.testUser.email,
+      gender: mocks.testUser.gender
+    });
 
-  // await request(app)
-  //   .post('/login')
-  //   .set({
-  //     'Authorization': `Basic ${btoa(mocks.testUser.username + ':' + mocks.testUser.password)}`
-  //   })
-  //   .then(response => {
-  //     testToken = response.body.token;
-  // });
+  await request(app)
+    .post('/login')
+    .set({
+      'Authorization': `Basic ${btoa(mocks.testUser.username + ':' + mocks.testUser.password)}`
+    })
+    .then(response => {
+      testToken = response.body.token;
+  });
 
   done();
 });
 
 afterAll(async done => {
-  // await request(app)
-  //   .delete('/delete-account')
-  //   .set({
-  //     'Authorization': `Bearer ${testToken}`,
-  //     'AuthorizationForDelete': `Basic ${btoa(mocks.testUser.username + ':' + mocks.testUser.password)}`
-  //   });
+  await request(app)
+    .delete('/delete-account')
+    .set({
+      'Authorization': `Bearer ${testToken}`,
+      'AuthorizationForDelete': `Basic ${btoa(mocks.testUser.username + ':' + mocks.testUser.password)}`
+    });
 
   await server.close();
   await db.MongoClient.close();
