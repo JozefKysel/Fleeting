@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState }  from 'react';
 import { Countdown } from '..';
-import { getRemoteStream,  } from '../../services/CallService';
-import { listenForCallLength } from '../../services/CallService';
+import { getRemoteStream, listenForCallLength  } from '../../services/CallService';
 import './CallPaneReceiver.less';
 
 function CallPaneReceiver(props) {

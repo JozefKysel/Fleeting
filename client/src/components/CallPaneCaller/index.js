@@ -1,8 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Countdown } from '..';
 import { Button } from 'antd';
-import { start, setSrcObjectRemote, makeOutGoing, getRemoteStream } from '../../services/CallService';
-import { listenForCallLength } from '../../services/CallService';
+import { start, makeOutGoing, getRemoteStream, listenForCallLength } from '../../services/CallService';
 import './CallPaneCaller.less'
 
 function CallPaneCaller(props) {
@@ -26,7 +25,7 @@ function CallPaneCaller(props) {
   const handleOnClick = () => {
     start(true);
     makeOutGoing(props.location.state.timeData);
-    setView(true)
+    setView(true);
   }
 
   return (
@@ -41,9 +40,9 @@ function CallPaneCaller(props) {
           <Button onClick={handleOnClick} size="large">Start Call</Button>
       </div>
       <div className="video" >
-        <video autoPlay style={{ width: '100%' }} ref={remoteVideo}/>
-        {time && <Countdown startingTime={time}/>}
+        <video autoPlay style={{ width: '100%' }} ref={remoteVideo} style={{opacity: view ? 1 : 0}}/>
       </div>
+      {time && <Countdown startingTime={time}/>}
     </>
   );
 }

@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import maleAvatar from '../../assets/img_avatar.png';
 import femaleAvatar from '../../assets/img_avatar2.png';
-import { Icon } from 'antd';
-import { useContext } from 'react';
 import { RenderContext } from '../../containers/Home';
 import { Link } from 'react-router-dom';
+import { Icon } from 'antd';
 
 function Contact({contact}) {
   const { addToContacts } = useContext(RenderContext);
