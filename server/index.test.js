@@ -6,6 +6,7 @@ const request = require('supertest');
 const btoa = require('btoa');
 let token;
 let testToken;
+const userModels = require('./models/users');
 
 beforeAll(async done => {
   server.listen(PORT);
@@ -122,6 +123,73 @@ describe('Socket.io', () => {
 });
 
 
+describe('UserModel', () => {
+
+  test('.set creates a new db document in collection users', async done => {
+    const { email, username, password, gender } = mocks.user;
+    const result = await userModels.set(email, username, password, gender);
+    expect(result.ops[0].email).toBe(email);
+    expect(result.ops[0].username).toBe(username);
+    expect(result.ops[0].gender).toBe(gender);
+    expect(result.ops[0].callLengths.length).toBe(0);
+    expect(result.ops[0].contacts.length).toBe(0);
+    expect(result.ops[0]._id).toBeDefined();
+    done();
+  });
+
+  test('.getByEmail finds one in collection users by email address', async done => {
+    const { email, username, password, gender } = mocks.user;
+    const result = await userModels.getByEmail(email);
+    expect(result.email).toBe(email);
+    expect(result.username).toBe(username);
+    expect(result.gender).toBe(gender);
+    expect(result.callLengths.length).toBe(0);
+    expect(result.contacts.length).toBe(0);
+    expect(result._id).toBeDefined();
+    done();
+  });
+
+  test('.getByUsername finds one in collection users by username', async done => {
+    const { email, username, password, gender } = mocks.user;
+    const result = await userModels.getByUsername(username);
+    expect(result.email).toBe(email);
+    expect(result.username).toBe(username);
+    expect(result.gender).toBe(gender);
+    expect(result.callLengths.length).toBe(0);
+    expect(result.contacts.length).toBe(0);
+    expect(result._id).toBeDefined();
+    done();
+  });
+
+  test('.getSearch finds all in collection users whose usernames match a string (case insensitive)', async done => {
+    const string = 'user';
+    const result = await userModels.getSearch(string);
+    expect(Array.isArray(result)).toBe(true);
+    expect(result.length).toBe(2);
+    expect(result.some(user => user.username === mocks.testUser.username)).toBeDefined();
+    expect(result.some(user => user.username === mocks.user.username)).toBeDefined();
+    done();
+  });
+
+  test('.updateContacts finds one in collection users and adds a new user to its contacts', async done => {
+    await userModels.updateContacts(mocks.user.username, mocks.testUser);
+    const result = await userModels.getByUsername(mocks.user.username);
+    expect(Array.isArray(result.contacts)).toBe(true);
+    expect(result.contacts.length).toBe(1);
+    expect(result.contacts.some(user => user.username === mocks.testUser.username)).toBeDefined();
+    done();
+  });
+
+  test('.deleteUser deletes one in collection users', async done => {
+    await userModels.deleteUser(mocks.user.username);
+    const result = await userModels.getByUsername(mocks.user.username);
+    expect(result).toBe(null);
+    done();
+  });
+
+});
+
+
 describe('API', () => {
 
   test('responds with HTTP 201 - /signup 🚀', () => {
@@ -196,11 +264,11 @@ describe('API', () => {
     .expect(403);
   });
   
-  test.todo('responds with HTTP 200 - /search/:mocks.user.username 🕵️‍♂️');
+  test.todo('responds with HTTP 200 - /search/:username 🕵️‍♂️');
 
-  test.todo('responds with HTTP 200 - /add/:mocks.user.username 👫');
+  test.todo('responds with HTTP 200 - /add/:username 👫');
   
-  test.todo('responds with HTTP 409 - /add/:mocks.user.username 👫 user in contacts');
+  test.todo('responds with HTTP 409 - /add/:username 👫 user in contacts');
   
   test.todo(`responds with HTTP 403 - /add/:mocks.badUser.username 🕴  user doesn't exist`);
 

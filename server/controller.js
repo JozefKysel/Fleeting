@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 
 exports.postSignupUser = async (req, res) => {
   try {
-    console.log('HERE')
     const decoded = atob(req.body.authorization.split(' ')[1]);
     let [ username, password ] = decoded.split(':');
     password = await bcrypt.hash(password, 10);
@@ -53,20 +52,20 @@ exports.postLoginUser = async (req, res) => {
   }
 };
 
-exports.getData = async (req, res) => {
+exports.getUserData = async (req, res) => {
   try {
     jwt.verify(req.token, 'secretkey', error => error && res.status(403).end());
-    const response = await users.getData(req.params.email);
+    const response = await users.getByEmail(req.params.email);
     res.status(200).json(response);
   } catch (e) {
     res.status(500);
   }
 }
 
-exports.getAll = async (req, res) => {
+exports.getSearch = async (req, res) => {
   try {
     jwt.verify(req.token, 'secretkey', error => error && res.status(403).end());
-    res.json(await users.get(req.params.username));
+    res.json(await users.getSearch(req.params.username));
   } catch (e) {
     res.status(500);
   }
@@ -81,23 +80,9 @@ exports.putNewContact = async (req, res) => {
       const user = await users.get(username);
       user.contacts.push(newContact);
       const { contacts } = user;
-      const response = await users.update(username, user.contacts);
+      const response = await users.updateContacts(username, user.contacts);
       res.status(200).json({ contacts });
     }
-  } catch (error) {
-    res.status(500).end();
-  }
-};
-
-exports.putNewCallLength = async (req, res) => {
-  try {
-    jwt.verify(req.token, 'secretkey', error => error && res.status(403).end());
-    if (req.body.newCallLength && req.headers.username) {
-      const callLengths = await users.get(req.headers.username).callLengths;
-      callLengths.push(newCallLength);
-      await users.update(username, callLengths);
-      res.json({ callLengths });
-    } else res.status(500).end();
   } catch (error) {
     res.status(500).end();
   }
@@ -114,7 +99,7 @@ exports.deleteUserAccount = async (req, res) => {
     user
       ? bcrypt.compare(password, user.password, async (_, same) => {
           if (same === true) {
-            const result = await users.delete(username);
+            const result = await users.deleteUser(username);
             res.status(200);
             res.send(result);
           } else {
