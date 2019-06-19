@@ -9,7 +9,8 @@ import FadeIn from 'react-fade-in';
 import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 
-function InputTime() {
+function InputTime(props) {
+  if (props.history.action === 'POP') props.history.push('/');
 
   const [callLength, setCallLength] = useState('');
 

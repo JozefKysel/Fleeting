@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Signup, PrivateRoutes } from '..';
 import api from '../../api-client';
 import { Redirect, Link } from 'react-router-dom';
 

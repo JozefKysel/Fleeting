@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { listenForIncomingCall, listenForCallLength } from '../services/CallService';
-import { User, NavBar, Footer, InputTime, CallPaneReceiver, CallExpired} from '../components';
-import { Router, Link} from "@reach/router";
+import { listenForIncomingCall} from '../services/CallService';
+import { User, NavBar, Footer } from '../components';
 import FadeIn from 'react-fade-in';
 import 'antd/lib/button/style';
 import api from '../api-client';
@@ -9,13 +8,10 @@ import { Button } from 'antd';
 import './Home.less';
 import jwtDecode from 'jwt-decode';
 
-
 export const RenderContext = React.createContext(null);
-export const CallerContext = React.createContext(null);
 
 function Home(props) {
 
-  const [incomingTimeData, setIncomingTimeData] = useState({});
   const [userData, setUserData] = useState({});
   const [contacts, setUserContacts] = useState({});
 
@@ -28,7 +24,6 @@ function Home(props) {
         setUserContacts(res.contacts);
       });
     listenForIncomingCall(props)
-    listenForCallLength(setIncomingCallFlag);
   }, [])
 
   const addToContacts = (contact) => {
@@ -38,10 +33,6 @@ function Home(props) {
       .then(res => setUserContacts(res.contacts))
       .catch(e => console.log(e));
     }
-  }
-
-  const setIncomingCallFlag = (timeData) => {
-    setIncomingTimeData(timeData)
   }
 
   const logout = () => {
@@ -74,9 +65,3 @@ function Home(props) {
 }
 
 export default Home;
-
-// <div className="contactsButton">
-//   <FadeIn>
-//     <Button size="small"> Add</Button>
-//   </FadeIn>
-// </div>

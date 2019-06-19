@@ -121,11 +121,11 @@ export const listenForIncomingCall = (props) => {
   socket.on("incoming call", data => {
     if (window.confirm(`Tom is calling you, do you want to answer?`)) {
       socket.emit('accepted call', data);
-      props.history.push('/callee');
+      props.history.push('/callee')
     }
-  })
+  });
 }
 
-export const listenForCallLength = toggleFlag => {
+export const listenForCallLength = (toggleFlag, props) => {
   socket.on('callLength', data => toggleFlag(data));
 };

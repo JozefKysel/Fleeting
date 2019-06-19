@@ -1,21 +1,28 @@
-import React from 'react';
-import { useEffect, useRef } from 'react';
-import { CountdownReceiver } from '..';
-import { getRemoteStream,  } from '../../services/CallService'
-import './CallPaneReceiver.less'
+import React, { useEffect, useRef, useState }  from 'react';
+import { Countdown } from '..';
+import { getRemoteStream,  } from '../../services/CallService';
+import { listenForCallLength } from '../../services/CallService';
+import './CallPaneReceiver.less';
 
 function CallPaneReceiver(props) {
-
+  if (props.history.action === 'POP') props.history.push('/');
+  const [time, setTime] = useState('');
   const remoteVideo = useRef(null);
+
+  const setIncomingCallFlag = (timeData) => {
+    const timeSubString = timeData.substring(3);
+    const startingTime = Date.parse('1970-01-01T00:' + timeSubString + 'Z');
+    setTime(startingTime);
+  }
+
+  listenForCallLength(setIncomingCallFlag);
 
   useEffect(() => {
     getRemoteStream(remoteStream => {
       remoteVideo.current.srcObject = remoteStream;
-    })
+    });
   }, []);
 
-  // <CountdownReceiver timeData={{ callLength: props.value.incomingTimeData.callLength }}
-  // callExpired={props.value.callHasExpired}
   return (
     <>
       {/* LOCAL VIDEO */}
@@ -24,6 +31,7 @@ function CallPaneReceiver(props) {
       <video autoPlay style={{ width: '100%' }} ref={remoteVideo} />
       {/* REMOTE VIDEO */}
       <div className="countdown">
+        {time && <Countdown startingTime={time}/>}
       </div>
       </div>
     </>
