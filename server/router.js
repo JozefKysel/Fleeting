@@ -13,9 +13,9 @@ const verifyToken = (req, res, next) => {
 
 router.post('/signup', controller.postSignupUser);
 router.post('/login', controller.postLoginUser);
+router.get('/user/:email', verifyToken, controller.getUserData);
 router.get('/search/:username', verifyToken, controller.getSearch);
 router.put('/add/:username', verifyToken, controller.putNewContact);
-router.get('/user/:email', verifyToken, controller.getUserData);
 router.delete('/delete-account', verifyToken, controller.deleteUserAccount)
 
 module.exports = router;

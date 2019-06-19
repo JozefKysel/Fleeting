@@ -172,8 +172,8 @@ describe('UserModel', () => {
   });
 
   test('.updateContacts finds one in collection users and adds a new user to its contacts', async done => {
-    await userModels.updateContacts(mocks.user.username, mocks.testUser);
-    const result = await userModels.getByUsername(mocks.user.username);
+    await userModels.updateContacts(mocks.user.email, mocks.testUser);
+    const result = await userModels.getByEmail(mocks.user.email);
     expect(Array.isArray(result.contacts)).toBe(true);
     expect(result.contacts.length).toBe(1);
     expect(result.contacts.some(user => user.username === mocks.testUser.username)).toBeDefined();
@@ -257,22 +257,72 @@ describe('API', () => {
   
   test('responds with HTTP 403 - /login 🔑 badUser', () => {
     return request(app)
-    .post('/login')
-    .set({
-      'Authorization': `Basic ${btoa(mocks.badUser.username + ':' + mocks.badUser.password)}`
-    })
-    .expect(403);
+      .post('/login')
+      .set({
+        'Authorization': `Basic ${btoa(mocks.badUser.username + ':' + mocks.badUser.password)}`
+      })
+      .expect(403);
   });
   
-  test.todo('responds with HTTP 200 - /search/:username 🕵️‍♂️');
+  test('responds with HTTP 200 - /search/:username 🕵️‍♂️ ', () => {
+    return request(app)
+      .get(`/search/${mocks.user.username}`)
+      .set({
+        'Authorization': `Bearer ${testToken}`
+      })
+      .then(response => {
+        expect(Array.isArray(response.body)).toBe(true);
+        expect(response.body.some(user => user.username === mocks.user.username)).toBe(true);
+        expect(response.body.find(user => user.username === mocks.testUser.username)).toBe(undefined);
+        expect(response.statusCode).toBe(200);
+      });
+  });
 
-  test.todo('responds with HTTP 200 - /add/:username 👫');
-  
-  test.todo('responds with HTTP 409 - /add/:username 👫 user in contacts');
-  
-  test.todo(`responds with HTTP 403 - /add/:mocks.badUser.username 🕴  user doesn't exist`);
+  test('responds with HTTP 200 - /add/:username 👫 ', () => {
+    return request(app)
+      .put(`/add/${mocks.user.username}`)
+      .set({
+        'Authorization': `Bearer ${testToken}`
+      })
+      .send(mocks.user)
+      .then(response => {
+        expect(Array.isArray(response.body.contacts)).toBe(true);
+        expect(response.body.contacts.some(user => user.username === mocks.user.username)).toBe(true);
+        expect(response.statusCode).toBe(200);
+      });
+  });
 
-  test('responds with HTTP 200 - /delete-account ✔︎', () => {
+  test('responds with HTTP 409 - /add/:username 👫 user in contacts', () => {
+    return request(app)
+      .put(`/add/${mocks.user.username}`)
+      .set({
+        'Authorization': `Bearer ${testToken}`
+      })
+      .send(mocks.user)
+      .expect(409);
+  });
+
+  test('responds with HTTP 409 - /add/:username 👫 self', () => {
+    return request(app)
+      .put(`/add/${mocks.testUser.username}`)
+      .set({
+        'Authorization': `Bearer ${testToken}`
+      })
+      .send(mocks.testUser)
+      .expect(409);
+  });
+  
+  test(`responds with HTTP 403 - /add/:badUsername 🕴  user doesn't exist`, () => {
+    return request(app)
+      .put(`/add/${mocks.badUser.username}`)
+      .set({
+        'Authorization': `Bearer ${testToken}`
+      })
+      .send(mocks.badUser)
+      .expect(404);
+  });
+
+  test('responds with HTTP 200 - /delete-account ✔︎ ', () => {
     return request(app)
       .delete('/delete-account')
       .set({

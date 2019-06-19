@@ -12,7 +12,7 @@ exports.set = async (email, username, password, gender) => {
       contacts: []
     });
   } catch (error) {
-    console.log(error);
+    throw Error(error);
   }
 };
 
@@ -22,7 +22,7 @@ exports.getByEmail = async email => {
       email: email
     });
   } catch (error) {
-    console.log(error);
+    throw Error(error);
   }
 };
 
@@ -32,7 +32,7 @@ exports.getByUsername = async username => {
       username: username
     });
   } catch (error) {
-    console.log(error);
+    throw Error(error);
   }
 };
 
@@ -44,18 +44,18 @@ exports.getSearch = async username => {
       }
     }).toArray();
   } catch(error) {
-    console.log(error);
+    throw Error(error);
   }
 };
 
-exports.updateContacts = async (username, newContact) => {
+exports.updateContacts = async (email, newContact) => {
   try {
     return await db.conn.collection('users').findOneAndUpdate(
-      { username },
+      { email },
       { $push: { contacts: newContact }}
     );
   } catch (error) {
-    console.log(error);
+    throw Error(error);
   }
 };
 
@@ -65,6 +65,6 @@ exports.deleteUser = async username => {
       { username }
     );
   } catch (error) {
-    console.log(error);
+    throw Error(error);
   }
 };
