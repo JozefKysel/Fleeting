@@ -1,23 +1,26 @@
 const db = require('./');
 
 
-exports.set = (email, username, password, gender) => {
-  return db.conn.collection('users').insertOne({
-    email,
-    username,
-    password,
-    gender,
-    callLengths: [],
-    contacts: []
-  });
+exports.set = async (email, username, password, gender) => {
+  try {
+    return await db.conn.collection('users').insertOne({
+      email,
+      username,
+      password,
+      gender,
+      callLengths: [],
+      contacts: []
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 exports.getByEmail = async email => {
   try {
-    const result = await db.conn.collection('users').findOne({
+    return await db.conn.collection('users').findOne({
       email: email
     });
-    return result;
   } catch (error) {
     console.log(error);
   }
@@ -25,10 +28,9 @@ exports.getByEmail = async email => {
 
 exports.getByUsername = async username => {
   try {
-    const result = await db.conn.collection('users').findOne({
+    return await db.conn.collection('users').findOne({
       username: username
     });
-    return result;
   } catch (error) {
     console.log(error);
   }
@@ -36,29 +38,25 @@ exports.getByUsername = async username => {
 
 exports.getSearch = async username => {
   try {
-    const searchExpression = new RegExp(username, 'i');
-    const result = await db.conn.collection('users').find({
+    return await db.conn.collection('users').find({
       username: {
-        $regex: searchExpression
+        $regex: RegExp(username, 'i')
       }
     }).toArray();
-    return result;
-  } catch(e) {
-    console.log(e);
+  } catch(error) {
+    console.log(error);
   }
 };
 
 exports.updateContacts = async (username, newContact) => {
-  const result = await db.conn.collection('users').findOneAndUpdate(
+  return await db.conn.collection('users').findOneAndUpdate(
     { username },
     { $push: { contacts: newContact }}
   );
-  return result;
 };
 
 exports.deleteUser = async username => {
-  const result = await db.conn.collection('users').deleteOne(
+  return await db.conn.collection('users').deleteOne(
     { username }
   );
-  return result;
 };

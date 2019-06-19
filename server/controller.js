@@ -77,10 +77,8 @@ exports.putNewContact = async (req, res) => {
   try {
     jwt.verify(req.token, 'secretkey', error => error && res.status(403).end());
     if (newContact && username) {
-      const user = await users.get(username);
-      user.contacts.push(newContact);
-      const { contacts } = user;
-      const response = await users.updateContacts(username, user.contacts);
+      const result = await users.updateContacts(username, newContact);
+      const contacts = result.contacts;
       res.status(200).json({ contacts });
     }
   } catch (error) {
