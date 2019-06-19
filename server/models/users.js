@@ -49,14 +49,22 @@ exports.getSearch = async username => {
 };
 
 exports.updateContacts = async (username, newContact) => {
-  return await db.conn.collection('users').findOneAndUpdate(
-    { username },
-    { $push: { contacts: newContact }}
-  );
+  try {
+    return await db.conn.collection('users').findOneAndUpdate(
+      { username },
+      { $push: { contacts: newContact }}
+    );
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 exports.deleteUser = async username => {
-  return await db.conn.collection('users').deleteOne(
-    { username }
-  );
+  try {
+    return await db.conn.collection('users').deleteOne(
+      { username }
+    );
+  } catch (error) {
+    console.log(error);
+  }
 };
