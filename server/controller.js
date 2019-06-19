@@ -9,14 +9,21 @@ exports.postSignupUser = async (req, res) => {
     let [ username, password ] = decoded.split(':');
     password = await bcrypt.hash(password, 10);
     
-    const userAlreadyExists = users.get(username);
-    if (userAlreadyExists) res.status(409) && res.json({error: 'Username already exists'});
-
-    const setUser = await users.set(req.body.email, username, password, req.body.gender);
-    const userData = setUser.ops[0];
-    setUser && userData
-      ? res.status(201) && res.json({ userData })
-      : res.status(500).end();
+    const usernameAlreadyExists = await users.get(username);
+    const emailAlreadyExists = await users.getByEmail(req.body.email);
+    if (usernameAlreadyExists) {
+      res.status(409);
+      res.json({error: 'Username already exists'});
+    } else if (emailAlreadyExists) {
+      res.status(200);
+      res.json({error: 'There already is an account connected to this email address'});
+    } else {
+      const setUser = await users.set(req.body.email, username, password, req.body.gender);
+      const userData = setUser.ops[0];
+      setUser && userData
+        ? res.status(201) && res.json({ userData })
+        : res.status(500).end();
+    }
   } catch (error) {
     res.status(500).end();
   }

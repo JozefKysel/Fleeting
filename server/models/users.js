@@ -14,10 +14,10 @@ exports.set = (email, username, password, gender) => {
 
 exports.getData = async email => {
   try {
-    const response = await db.conn.collection('users').findOne({
+    const result = await db.conn.collection('users').findOne({
       email: email
     });
-    return response;
+    return result;
   } catch(e) {
     console.log(e);
   }
@@ -26,28 +26,42 @@ exports.getData = async email => {
 exports.get = async username => {
   try {
     const searchExpression = new RegExp(username, 'i');
-    const response = await db.conn.collection('users').findOne({
-    username: {
-      $regex: searchExpression
-    }
+    const result = await db.conn.collection('users').findOne({
+      username: {
+        $regex: searchExpression
+      }
     });
-    return response;
+    return result;
   } catch(e) {
     console.log(e);
   }
 };
 
+exports.getByEmail = async email => {
+  try {
+    const searchExpression = new RegExp(email, 'i');
+    const result = await db.conn.collection('users').findOne({
+      email: {
+        $regex: searchExpression
+      }
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.update = async (username, property) => {
-  const response = await db.conn.collection('users').findOneAndUpdate(
+  const result = await db.conn.collection('users').findOneAndUpdate(
     { username },
     { $set: {contacts: property }}
   );
-  return response;
+  return result;
 };
 
 exports.delete = async username => {
-  const response = await db.conn.collection('users').findOneAndDelete(
+  const result = await db.conn.collection('users').deleteOne(
     { username }
   );
-  return response;
+  return result;
 };

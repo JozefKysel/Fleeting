@@ -5,9 +5,42 @@ const { createClient, mocks } = require('./utils');
 const request = require('supertest');
 const btoa = require('btoa');
 let token;
+// let testToken;
 
-beforeAll(done => server.listen(PORT, done));
-afterAll(done => server.close() && db.MongoClient.close(done));
+beforeAll(done => {
+  server.listen(PORT);
+  
+  // await request(app)
+  //   .post('/signup')
+  //   .send({
+  //     authorization: `Basic ${btoa(mocks.testUser.username + ':' + mocks.testUser.password)}`,
+  //     email: mocks.testUser.email,
+  //     gender: mocks.testUser.gender
+  //   });
+
+  // await request(app)
+  //   .post('/login')
+  //   .set({
+  //     'Authorization': `Basic ${btoa(mocks.testUser.username + ':' + mocks.testUser.password)}`
+  //   })
+  //   .then(response => {
+  //     testToken = response.body.token;
+  // });
+
+  done();
+});
+
+afterAll(done => {
+  // await request(app)
+  //   .delete('/delete-account')
+  //   .set({
+  //     'Authorization': `Bearer ${testToken}`,
+  //     'AuthorizationForDelete': `Basic ${btoa(mocks.testUser.username + ':' + mocks.testUser.password)}`
+  //   });
+
+  server.close();
+  db.MongoClient.close(done);
+});
 
 
 describe('Socket.io', () => {
@@ -90,7 +123,7 @@ describe('Socket.io', () => {
 
 describe('API', () => {
 
-  test('responds with HTTP 201 - /signup', () => {
+  test('responds with HTTP 201 - /signup 🚀', () => {
     return request(app)
       .post('/signup')
       .send({
@@ -99,21 +132,20 @@ describe('API', () => {
         gender: mocks.user.gender
       })
       .then(response => {
-        // console.log(response.body);
-        // expect(response.body.userData.email).toBe(mocks.user.email);
-        // expect(response.body.userData.username).toBe(mocks.user.username);
-        // expect(response.body.userData.password).toBeDefined();
-        // expect(typeof response.body.userData.password).toBe('string');
-        // expect(response.body.userData.gender).toBe(mocks.user.gender);
-        // expect(Array.isArray(response.body.userData.callLengths)).toBe(true);
-        // expect(response.body.userData.callLengths.length).toBe(0);
-        // expect(Array.isArray(response.body.userData.contacts)).toBe(true);
-        // expect(response.body.userData.contacts.length).toBe(0);
+        expect(response.body.userData.email).toBe(mocks.user.email);
+        expect(response.body.userData.username).toBe(mocks.user.username);
+        expect(response.body.userData.password).toBeDefined();
+        expect(typeof response.body.userData.password).toBe('string');
+        expect(response.body.userData.gender).toBe(mocks.user.gender);
+        expect(Array.isArray(response.body.userData.callLengths)).toBe(true);
+        expect(response.body.userData.callLengths.length).toBe(0);
+        expect(Array.isArray(response.body.userData.contacts)).toBe(true);
+        expect(response.body.userData.contacts.length).toBe(0);
         expect(response.statusCode).toBe(201);
       });
   });
 
-  test('responds with HTTP 409 - /signup username already exists', () => {
+  test('responds with HTTP 409 - /signup 🚀 username already exists', () => {
     return request(app)
       .post('/signup')
       .send({
@@ -125,34 +157,36 @@ describe('API', () => {
         expect(response.body.error).toBe('Username already exists');
         expect(response.statusCode).toBe(409);
       });
-    });
+  });
     
-  test.todo('responds with HTTP 200 - /signup account with this email already exists');
-  
-  test('responds with HTTP 200 - /login user', () => {
+  test('responds with HTTP 200 - /signup 🚀 email address already exists', () => {
     return request(app)
-    .post('/login')
-    .set({
-      'Authorization': `Basic ${btoa(mocks.user.username + ':' + mocks.user.password)}`
-    })
-    .then(response => {
-      token = response.body.token;
-      expect(response.body.token).toBeDefined();
-      expect(response.statusCode).toBe(200);
-    });
-  });
-
-  test('responds with HTTP 200 - /delete-account', () => {
-    return request(app)
-      .delete('/delete-account')
-      .set({
-        'Authorization': `Bearer ${token}`,
-        'AuthorizationForDelete': `Basic ${btoa(mocks.user.username + ':' + mocks.user.password)}`
+      .post('/signup')
+      .send({
+        authorization: `Basic ${btoa(mocks.badUser.username + ':' + mocks.badUser.password)}`,
+        email: mocks.user.email,
+        gender: mocks.badUser.gender
       })
-      .expect(200);
+      .then(response =>{
+        expect(response.body.error).toBe('There already is an account connected to this email address');
+        expect(response.statusCode).toBe(200);
+      });
   });
   
-  test('responds with HTTP 403 - /login badUser', () => {
+  test('responds with HTTP 200 - /login 🔑 user', () => {
+    return request(app)
+      .post('/login')
+      .set({
+        'Authorization': `Basic ${btoa(mocks.user.username + ':' + mocks.user.password)}`
+      })
+      .then(response => {
+        expect(response.body.token).toBeDefined();
+        token = response.body.token;
+        expect(response.statusCode).toBe(200);
+      });
+  });
+  
+  test('responds with HTTP 403 - /login 🔑 badUser', () => {
     return request(app)
     .post('/login')
     .set({
@@ -161,11 +195,22 @@ describe('API', () => {
     .expect(403);
   });
   
-  test.todo('new user after signup should appear in search');
+  test.todo('responds with HTTP 200 - /search/:mocks.user.username 🕵️‍♂️');
+
+  test.todo('responds with HTTP 200 - /add/:mocks.user.username 👫');
   
-  test.todo('should not be able to add a contact that is not in the db / search');
+  test.todo('responds with HTTP 409 - /add/:mocks.user.username 👫 user in contacts');
   
-  
-  test.todo('should not be able to add a contact that is already in the contacts');
+  test.todo(`responds with HTTP 403 - /add/:mocks.badUser.username 🕴  user doesn't exist`);
+
+  test('responds with HTTP 200 - /delete-account 👋', () => {
+    return request(app)
+      .delete('/delete-account')
+      .set({
+        'Authorization': `Bearer ${token}`,
+        'AuthorizationForDelete': `Basic ${btoa(mocks.user.username + ':' + mocks.user.password)}`
+      })
+      .expect(200);
+  });
   
 });
