@@ -21,7 +21,7 @@ exports.getData = async email => {
   } catch(e) {
     console.log(e);
   }
-}
+};
 
 exports.get = async username => {
   try {

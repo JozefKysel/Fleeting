@@ -2,7 +2,7 @@ const MongoClient = require('mongodb').MongoClient;
 const db = {};
 
 const dbUrl = 'mongodb://localhost:27017';
-const dbName = 'fleeting';
+const dbName = process.env.NODE_ENV !== 'test' ? 'fleeting' : 'test-fleeting';
 
 db.MongoClient = new MongoClient(dbUrl, { useNewUrlParser: true });
 

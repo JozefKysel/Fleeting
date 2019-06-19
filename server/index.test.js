@@ -30,7 +30,7 @@ beforeAll(done => {
   done();
 });
 
-afterAll(done => {
+afterAll(async done => {
   // await request(app)
   //   .delete('/delete-account')
   //   .set({
@@ -38,8 +38,9 @@ afterAll(done => {
   //     'AuthorizationForDelete': `Basic ${btoa(mocks.testUser.username + ':' + mocks.testUser.password)}`
   //   });
 
-  server.close();
-  db.MongoClient.close(done);
+  await server.close();
+  await db.MongoClient.close();
+  done();
 });
 
 
@@ -203,7 +204,7 @@ describe('API', () => {
   
   test.todo(`responds with HTTP 403 - /add/:mocks.badUser.username 🕴  user doesn't exist`);
 
-  test('responds with HTTP 200 - /delete-account 👋', () => {
+  test('responds with HTTP 200 - /delete-account ✔︎', () => {
     return request(app)
       .delete('/delete-account')
       .set({
