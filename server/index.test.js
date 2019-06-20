@@ -52,22 +52,20 @@ describe('Socket.io', () => {
     const client2 = await createClient(PORT);
     const message = 'hello world';
     
-    client1.emit('message', message);
-
     client2.on('message', data => {
       expect(data).toBe(message);
       client1.disconnect();
       client2.disconnect();
       done();
     });
+
+    client1.emit('message', message);
   });
 
   test('broadcasts a call from one client to another', async done => {
     const client1 = await createClient(PORT);
     const client2 = await createClient(PORT);
     const callLength = '00:05:00';
-    
-    client1.emit('outgoing call', callLength);
 
     client2.on('incoming call', data => {
       expect(data).toBe(callLength);
@@ -75,6 +73,8 @@ describe('Socket.io', () => {
       client2.disconnect();
       done();
     });
+    
+    client1.emit('outgoing call', callLength);
   });
 
   test('broadcasts a call to all other clients connected', async done => {
@@ -82,19 +82,28 @@ describe('Socket.io', () => {
     const client2 = await createClient(PORT);
     const client3 = await createClient(PORT);
     const callLength = '00:05:00';
+    let countReceived = 0;
+    let client1Received = false;
 
-    client1.emit('outgoing call', callLength);
-
+    client1.on('incoming call', () => {
+      client1Received = true;
+    });
     client2.on('incoming call', data => {
       expect(data).toBe(callLength);
-      client1.disconnect();
-      client2.disconnect();
+      countReceived ++;
     });
     client3.on('incoming call', data => {
       expect(data).toBe(callLength);
-      client3.disconnect();
-      done();
+      countReceived ++;
     });
+
+    client1.emit('outgoing call', callLength);
+
+    setTimeout(() => {
+      countReceived === 2 && ! client1Received
+        && client1.disconnect() && client2.disconnect() && client3.disconnect()
+        && done();
+    }, 200);
   });
 
   test('emits the call length to all clients connected', async done => {
