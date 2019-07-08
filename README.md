@@ -46,38 +46,6 @@ Fleeting makes it possible to have focused, efficient meetings via time-limited 
   <img src="https://lh3.googleusercontent.com/NOsAJlc8uL3mFPTtsC-A2sMU8Re3DofmpGISZPqEFX8mwc7CGm1cJlDtvDi-PV2hhbjgiGs88XNhtrgUhtxUHReWHbbJlZwg0aZYqmPI-zvpj1iGOE8ZWLV2axJlqkcUjgKEPBh-Km4=w2400" alt="fleeting" border="0" width="100%">
 </p>
 
-
-
-## Installation
-
-Try the deployed demo using two browser windows:
-
-https://awesome-mcnulty-62c21e.netlify.com/
-
-To clone and run locally:
-
-`git clone https://github.com/whenmoon/Fleeting.git`
-
-`cd call-server`
-
-`npm install`
-
-`node index.js`
-
-`cd ../socket-server`
-
-`npm install`
-
-`node index.js`
-
-`cd ../client` 
-
-`npm install`
-
-`npm start`
-
-Run two instances of the react app using the prompted ports in Chrome and open dev tools for both. Once the development server is running, choose any contact to call by clicking on the phone icon. Choose the length of call click 'start call' and accept the incoming call on the second client.
-
 ## TechStack
 
 * [ReactJS](https://reactjs.org/)
